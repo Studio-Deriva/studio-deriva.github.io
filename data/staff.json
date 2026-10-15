@@ -1,1 +1,70 @@
-{ "updated": null, "groups": [] }
+{
+  "updated": "2026-10-15T22:03:16.914Z",
+  "groups": [
+    {
+      "role": {
+        "id": "1549038402605682768",
+        "name": "Owner",
+        "color": 16151296
+      },
+      "members": [
+        {
+          "id": "1060283705450561587",
+          "name": "⭒♱3munAle♱⭒",
+          "username": "3mun_",
+          "avatar": "https://cdn.discordapp.com/avatars/1060283705450561587/e71fb5c7f5081748a20b14e4e59f97a4.png?size=256",
+          "roles": [
+            {
+              "name": "Owner",
+              "color": 16151296
+            },
+            {
+              "name": "3D Modeler",
+              "color": 14715452
+            },
+            {
+              "name": "Texture Artist",
+              "color": 8019140
+            }
+          ]
+        },
+        {
+          "id": "902563801134678027",
+          "name": "FrancescoMK",
+          "username": "francescomk17",
+          "avatar": "https://cdn.discordapp.com/avatars/902563801134678027/09272e873f7989aa973a1f1b32a9437e.png?size=256",
+          "roles": [
+            {
+              "name": "Owner",
+              "color": 16151296
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "role": {
+        "id": "1549059581840461975",
+        "name": "3D Modeler",
+        "color": 14715452
+      },
+      "members": []
+    },
+    {
+      "role": {
+        "id": "1549059582910009395",
+        "name": "Texture Artist",
+        "color": 8019140
+      },
+      "members": []
+    },
+    {
+      "role": {
+        "id": "1549059583853596846",
+        "name": "Animator",
+        "color": 3123360
+      },
+      "members": []
+    }
+  ]
+}
