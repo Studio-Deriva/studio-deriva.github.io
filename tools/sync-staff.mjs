@@ -38,9 +38,13 @@ async function api(path) {
   fail(`Rate limited too many times on ${path}`);
 }
 
+// Messages go out as workflow annotations too, so they show on the run's summary page.
 function fail(message) {
-  console.error('sync-staff: ' + message);
+  console.error('::error::sync-staff: ' + message);
   process.exit(1);
+}
+function notice(message) {
+  console.log('::notice::sync-staff: ' + message);
 }
 
 function avatarUrl(guildId, member) {
@@ -62,10 +66,10 @@ const allRoles = await api(`/guilds/${guildId}/roles`);
 // Staff roles in the configured order; each entry may be a role name or a role ID.
 const staffRoles = config.roles.map((key) => {
   const role = allRoles.find((r) => r.id === String(key)) ?? allRoles.find((r) => r.name.toLowerCase() === String(key).toLowerCase());
-  if (!role) console.warn(`sync-staff: no role called or numbered "${key}" in the server, skipped`);
+  if (!role) console.log(`::warning::sync-staff: no role called or numbered "${key}" in the server, skipped`);
   return role;
 }).filter(Boolean);
-const staffIds = new Set(staffRoles.map((r) => r.id));
+notice('roles in the server, highest first: ' + [...allRoles].sort((a, b) => b.position - a.position).filter((r) => r.name !== '@everyone').map((r) => r.name).join(', '));
 
 // The member list, a thousand at a time.
 const members = [];
@@ -105,5 +109,5 @@ const data = { updated: same ? previous.updated : new Date().toISOString(), grou
 await mkdir(new URL('../data/', import.meta.url), { recursive: true });
 await writeFile(out, JSON.stringify(data, null, 2) + '\n');
 const count = groups.reduce((n, g) => n + g.members.length, 0);
-console.log(`sync-staff: ${count} staff in ${groups.filter((g) => g.members.length).length} roles${same ? ' (unchanged)' : ''}`);
-if (members.length <= 1) console.warn('sync-staff: only one member came back. Is the Server Members intent on for the bot?');
+notice(`${count} staff in ${groups.filter((g) => g.members.length).length} roles${same ? ' (unchanged)' : ''}`);
+if (members.length <= 1) console.log('::warning::sync-staff: only one member came back. Is the Server Members intent on for the bot?');

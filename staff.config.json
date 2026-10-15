@@ -1,5 +1,13 @@
 {
-  "guildId": "",
-  "roles": ["Owner", "Admin", "Developer", "3D Modeler", "Texture Artist", "Animator", "Moderator"],
+  "guildId": "1549024143238893669",
+  "roles": [
+    "Owner",
+    "Admin",
+    "Developer",
+    "3D Modeler",
+    "Texture Artist",
+    "Animator",
+    "Moderator"
+  ],
   "hide": []
 }
