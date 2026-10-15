@@ -1,76 +1,26 @@
 /* BetterTrades, playable in the browser.
-   A faithful copy of the mod's trade screen: the same textures, the same slot grid
+   A faithful copy of the mod's trade screen: the mod's own GUI textures, the same slot grid
    (vanilla GENERIC_9X6: slot c,r at x = 8 + 18c, y = 30 + 18r on the texture), the same
-   buttons and the same rules. The other player is simulated. */
+   buttons and the same rules. Items, heads and text use Minecraft's and Cobblemon's own
+   textures, and the text is drawn with Minecraft's bitmap font. The other player is simulated. */
 (function () {
   var root = document.getElementById('trade-demo');
   if (!root) return;
 
   var TEX = 'assets/mods/bettertrades-gui/';
+  var MC = TEX + 'minecraft/', CB = TEX + 'cobblemon/';
   var GUI_W = 176, GUI_H = 234, PANEL_W = 79, GAP = 6;
   var MAX_OFFER = 8;
   var COUNTDOWN_MS = 3000, CANCEL_FRAMES = 8;
   var THEM = 'Mira';
 
-  // ------------------------------------------------------------------ pixel art
-  // Our own 16x16 icons: shapes are masks, shaded from the top left, with a dark outline.
-  function icon(mask, base, light, dark, line, extra) {
-    var c = document.createElement('canvas'); c.width = c.height = 16;
-    var x = c.getContext('2d');
-    var m = [];
-    for (var j = 0; j < 16; j++) for (var i = 0; i < 16; i++) m[j * 16 + i] = mask(i, j);
-    function inside(i, j) { return i >= 0 && j >= 0 && i < 16 && j < 16 && m[j * 16 + i]; }
-    for (var j2 = 0; j2 < 16; j2++) for (var i2 = 0; i2 < 16; i2++) {
-      if (!inside(i2, j2)) continue;
-      var edge = !inside(i2 - 1, j2) || !inside(i2 + 1, j2) || !inside(i2, j2 - 1) || !inside(i2, j2 + 1);
-      var col = edge ? line : (i2 + j2 < 13 ? light : (i2 + j2 > 18 ? dark : base));
-      if (typeof base === 'function') col = edge ? line : base(i2, j2);
-      x.fillStyle = col; x.fillRect(i2, j2, 1, 1);
-    }
-    if (extra) extra(x);
-    return c.toDataURL();
-  }
-  function px(x, col, pts) { x.fillStyle = col; for (var k = 0; k < pts.length; k += 2) x.fillRect(pts[k], pts[k + 1], 1, 1); }
-  function ball(top, band) {
-    return icon(function (i, j) { var dx = i - 7.5, dy = j - 7.5; return dx * dx + dy * dy <= 42; },
-      function (i, j) {
-        if (j === 7 || j === 8) return '#2b2b33';
-        if (j < 7) return (i + j < 8) ? '#ffffff' : top;
-        return (i + j > 20) ? '#c9ccd6' : '#f4f5f8';
-      }, null, null, '#1d1d24', function (x) {
-        if (band) px(x, band, [4, 4, 11, 4]);
-        x.fillStyle = '#1d1d24'; x.fillRect(6, 6, 4, 4);
-        x.fillStyle = '#f4f5f8'; x.fillRect(7, 7, 2, 2);
-      });
-  }
-  function face(skin, hair, eyes, shirt) {
-    var c = document.createElement('canvas'); c.width = c.height = 16;
-    var x = c.getContext('2d');
-    x.fillStyle = skin; x.fillRect(0, 0, 16, 16);
-    x.fillStyle = hair; x.fillRect(0, 0, 16, 4); x.fillRect(0, 4, 2, 4); x.fillRect(14, 4, 2, 4);
-    x.fillStyle = '#ffffff'; x.fillRect(2, 8, 4, 2); x.fillRect(10, 8, 4, 2);
-    x.fillStyle = eyes; x.fillRect(4, 8, 2, 2); x.fillRect(10, 8, 2, 2);
-    x.fillStyle = 'rgba(0,0,0,.25)'; x.fillRect(6, 12, 4, 2);
-    x.fillStyle = shirt; x.fillRect(0, 15, 16, 1);
-    return c.toDataURL();
-  }
-
   var ICON = {
-    diamond: icon(function (i, j) { return Math.abs(i - 7.5) + Math.abs(j - 7.5) * 1.15 <= 7; }, '#4ee0d2', '#c8fff8', '#1b9c95', '#0b4f4b'),
-    emerald: icon(function (i, j) { return Math.abs(i - 7.5) * 1.6 + Math.abs(j - 7.5) <= 8 && Math.abs(j - 7.5) < 7; }, '#2ccf5f', '#a6ffbd', '#14843a', '#0a3f1d'),
-    gold: icon(function (i, j) { return j >= 5 && j <= 11 && i >= 1 + (11 - j) / 2 && i <= 14 - (11 - j) / 2; }, '#f6c53b', '#fff3a8', '#c58a14', '#6b4508'),
-    iron: icon(function (i, j) { return j >= 5 && j <= 11 && i >= 1 + (11 - j) / 2 && i <= 14 - (11 - j) / 2; }, '#d6d9de', '#ffffff', '#8f949c', '#4a4d54'),
-    apple: icon(function (i, j) { var dx = i - 7.5, dy = j - 8.5; return dx * dx + dy * dy <= 34; }, '#e0302f', '#ff8c7a', '#99151d', '#4d0a0e', function (x) { px(x, '#5b3a1e', [8, 1, 8, 2, 7, 3]); px(x, '#3fae3a', [9, 1, 10, 1, 10, 2, 11, 2]); }),
-    pearl: icon(function (i, j) { var dx = i - 7.5, dy = j - 7.5; return dx * dx + dy * dy <= 30; }, '#1f6d66', '#7fe0cf', '#0e3b38', '#06201e', function (x) { x.fillStyle = '#0a2a27'; x.fillRect(6, 6, 4, 4); }),
-    candy: icon(function (i, j) { var dx = i - 7.5, dy = j - 7.5; return (dx * dx + dy * dy <= 20) || (Math.abs(dy) <= 2 && Math.abs(dx) <= 7.5); }, '#9b59d6', '#e0b6ff', '#5c2a8a', '#2c1047', function (x) { px(x, '#ffffff', [6, 6, 7, 6]); }),
-    book: icon(function (i, j) { return i >= 2 && i <= 13 && j >= 2 && j <= 14; }, function (i, j) { return i <= 3 ? '#6b3d1e' : (j >= 12 ? '#efe6cf' : '#a0522d'); }, null, null, '#3a1f0e'),
-    bread: icon(function (i, j) { var dx = (i - 7.5) / 7, dy = (j - 9) / 4; return dx * dx + dy * dy <= 1; }, '#d39a45', '#f6d08a', '#9b6420', '#4f300c', function (x) { px(x, '#9b6420', [5, 7, 8, 7, 11, 7]); }),
-    poke: ball('#e63b3b'), great: ball('#3b6fe6', '#e63b3b'), ultra: ball('#2b2b33', '#f2c230'), premier: ball('#f4f5f8', '#e63b3b'),
-    headYou: face('#c68b62', '#3b2a1e', '#2743F4', '#2743F4'),
-    headThem: face('#e8b48f', '#b8492f', '#2f8f5b', '#6ABCAE'),
-    pokeButton: ball('#e63b3b')
+    diamond: MC + 'diamond.png', emerald: MC + 'emerald.png', gold: MC + 'gold_ingot.png', iron: MC + 'iron_ingot.png',
+    apple: MC + 'apple.png', pearl: MC + 'ender_pearl.png', book: MC + 'book.png', bread: MC + 'bread.png',
+    candy: CB + 'rare_candy.png', expcandy: CB + 'exp_candy_m.png',
+    poke: CB + 'poke_ball.png', great: CB + 'great_ball.png', ultra: CB + 'ultra_ball.png', premier: CB + 'premier_ball.png', master: CB + 'master_ball.png',
+    headYou: MC + 'head_you.png', headThem: MC + 'head_them.png'
   };
-
   var ITEMS = {
     diamond: { name: 'Diamond', icon: 'diamond', color: 'b' },
     emerald: { name: 'Emerald', icon: 'emerald', color: 'a' },
@@ -79,26 +29,100 @@
     apple: { name: 'Apple', icon: 'apple', color: 'f' },
     pearl: { name: 'Ender Pearl', icon: 'pearl', color: 'f' },
     candy: { name: 'Rare Candy', icon: 'candy', color: 'd' },
+    expcandy: { name: 'Exp. Candy M', icon: 'expcandy', color: 'f' },
     book: { name: 'Book', icon: 'book', color: 'f' },
     bread: { name: 'Bread', icon: 'bread', color: 'f' }
   };
   function mon(name, lv, ball, opts) { opts = opts || {}; return { name: name, lv: lv, ball: ball, shiny: !!opts.shiny, tradeable: opts.tradeable !== false, id: name + lv + Math.random().toString(36).slice(2, 6) }; }
 
+  // ------------------------------------------------------------------ Minecraft's bitmap font
+  // ascii.png is a 16x16 grid of 8x8 glyphs. Each glyph is as wide as its rightmost opaque
+  // column, plus one pixel of spacing; a space is 4. Shadows are the text colour at a quarter.
+  var CODES = { '0': '#000000', '1': '#0000AA', '2': '#00AA00', '3': '#00AAAA', '4': '#AA0000', '5': '#AA00AA', '6': '#FFAA00', '7': '#AAAAAA', '8': '#555555', '9': '#5555FF', a: '#55FF55', b: '#55FFFF', c: '#FF5555', d: '#FF55FF', e: '#FFFF55', f: '#FFFFFF' };
+  var font = { img: null, adv: [], tinted: {} };
+  function loadFont(done) {
+    var img = new Image();
+    img.onload = function () {
+      var c = document.createElement('canvas'); c.width = c.height = 128;
+      var x = c.getContext('2d'); x.drawImage(img, 0, 0);
+      var d = null;
+      try { d = x.getImageData(0, 0, 128, 128).data; } catch (e) { /* opened from disk: fall back to 5px glyphs */ }
+      for (var ch = 0; ch < 256; ch++) {
+        if (!d) { font.adv[ch] = ch === 32 ? 4 : 6; continue; }
+        var gx = (ch % 16) * 8, gy = Math.floor(ch / 16) * 8, w = 0;
+        for (var col = 7; col >= 0 && !w; col--) for (var row = 0; row < 8; row++) if (d[((gy + row) * 128 + gx + col) * 4 + 3] > 0) { w = col + 1; break; }
+        font.adv[ch] = ch === 32 ? 4 : w + 1;
+      }
+      font.img = c; done();
+    };
+    img.src = MC + 'ascii.png';
+  }
+  function tinted(color) {
+    if (font.tinted[color]) return font.tinted[color];
+    var c = document.createElement('canvas'); c.width = c.height = 128;
+    var x = c.getContext('2d');
+    x.drawImage(font.img, 0, 0);
+    x.globalCompositeOperation = 'source-in'; x.fillStyle = color; x.fillRect(0, 0, 128, 128);
+    return (font.tinted[color] = c);
+  }
+  function shade(hex) {
+    var n = parseInt(hex.slice(1), 16);
+    return '#' + [n >> 16 & 255, n >> 8 & 255, n & 255].map(function (v) { return ('0' + (v >> 2).toString(16)).slice(-2); }).join('');
+  }
+  function runs(str, base) {
+    var out = [], color = base || '#FFFFFF', parts = String(str).split(/&([0-9a-fr])/);
+    for (var k = 0; k < parts.length; k++) {
+      if (k % 2) { color = parts[k] === 'r' ? (base || '#FFFFFF') : CODES[parts[k]]; continue; }
+      if (parts[k]) out.push({ t: parts[k], c: color });
+    }
+    return out;
+  }
+  function code(ch) { var c = ch.charCodeAt(0); return c < 256 ? c : 63; }
+  function width(str) {
+    var w = 0; runs(str).forEach(function (r) { for (var i = 0; i < r.t.length; i++) w += font.adv[code(r.t[i])]; });
+    return Math.max(0, w - 1);
+  }
+  function drawText(ctx, str, x, y, opts) {
+    opts = opts || {};
+    var shadow = opts.shadow !== false;
+    runs(str, opts.color).forEach(function (r) {
+      for (var i = 0; i < r.t.length; i++) {
+        var ch = code(r.t[i]);
+        if (ch !== 32) {
+          var sx = (ch % 16) * 8, sy = Math.floor(ch / 16) * 8;
+          if (shadow) ctx.drawImage(tinted(shade(r.c)), sx, sy, 8, 8, x + 1, y + 1, 8, 8);
+          ctx.drawImage(tinted(r.c), sx, sy, 8, 8, x, y, 8, 8);
+        }
+        x += font.adv[ch];
+      }
+    });
+  }
+  // A line of text as an element placed in texture pixels.
+  function textCanvas(str, opts) {
+    var c = document.createElement('canvas');
+    c.width = Math.max(1, width(str) + 2); c.height = 9;
+    drawText(c.getContext('2d'), str, 0, 0, opts);
+    c.className = 'mc-px';
+    c.style.width = 'calc(var(--s) * ' + c.width + 'px)'; c.style.height = 'calc(var(--s) * ' + c.height + 'px)';
+    return c;
+  }
+  function strip(s) { return String(s).replace(/&[0-9a-fr]/g, ''); }
+
   // ------------------------------------------------------------------ state
   var S;
   function fresh() {
     var inv = new Array(36).fill(null);
-    var start = [['diamond', 12], ['emerald', 30], ['gold', 21], ['iron', 64], ['apple', 9], ['pearl', 16], ['candy', 4], ['book', 3], ['bread', 48]];
+    var start = [['diamond', 12], ['emerald', 30], ['gold', 21], ['iron', 64], ['apple', 9], ['pearl', 16], ['candy', 4], ['book', 3], ['bread', 48], ['expcandy', 6]];
     start.forEach(function (s, i) { inv[i < 4 ? 27 + i : i - 4] = { id: s[0], count: s[1] }; });
     return {
       screen: 'trade', stage: 'offering', lockAt: 0, version: 0,
-      inv: inv, balance: 1250, theirBalance: 4000,
+      inv: inv, balance: 1250,
       mine: { entries: [], money: 0, ready: false },
       theirs: { entries: [{ mon: mon('Charmander', 14, 'poke') }, { item: { id: 'candy', count: 3 } }, { item: { id: 'gold', count: 8 } }], money: 0, ready: false },
       party: [mon('Pikachu', 25, 'poke'), mon('Eevee', 18, 'great', { shiny: true }), mon('Bulbasaur', 12, 'poke'), mon('Gengar', 41, 'ultra', { tradeable: false }), null, null],
       boxes: [
         [mon('Magikarp', 8, 'poke'), mon('Zubat', 11, 'poke'), mon('Psyduck', 16, 'great'), null, mon('Geodude', 13, 'poke'), mon('Abra', 9, 'ultra'), null, null, mon('Ponyta', 22, 'great')].concat(new Array(21).fill(null)),
-        [mon('Dratini', 15, 'ultra'), null, mon('Snorlax', 30, 'premier')].concat(new Array(27).fill(null))
+        [mon('Dratini', 15, 'ultra'), null, mon('Snorlax', 30, 'premier'), null, null, mon('Mewtwo', 70, 'master', { tradeable: false })].concat(new Array(24).fill(null))
       ],
       box: 0, moneyDraft: '', done: null
     };
@@ -113,16 +137,15 @@
   var log = root.querySelector('.mc-log');
   var input = null;
 
-  function el(tag, cls, x, y, w, h) {
-    var e = document.createElement(tag);
-    if (cls) e.className = cls;
+  function place(e, x, y, w, h) {
     e.style.left = 'calc(var(--s) * ' + x + 'px)'; e.style.top = 'calc(var(--s) * ' + y + 'px)';
     if (w) e.style.width = 'calc(var(--s) * ' + w + 'px)';
     if (h) e.style.height = 'calc(var(--s) * ' + h + 'px)';
     return e;
   }
-  function tex(parent, name, x, y, w, h) {
-    var i = el('img', 'mc-tex', x, y, w, h); i.src = TEX + name + '.png'; i.alt = ''; i.draggable = false;
+  function el(tag, cls, x, y, w, h) { var e = document.createElement(tag); if (cls) e.className = cls; return place(e, x, y, w, h); }
+  function tex(parent, src, x, y, w, h) {
+    var i = el('img', 'mc-px', x, y, w, h); i.src = src; i.alt = ''; i.draggable = false;
     parent.appendChild(i); return i;
   }
   function slotXY(i) { return [8 + 18 * (i % 9), 30 + 18 * Math.floor(i / 9)]; }
@@ -132,7 +155,12 @@
     var b = el('button', 'mc-slot', x, y, 16, 16);
     b.type = 'button';
     if (opts.icon) { var im = document.createElement('img'); im.src = opts.icon; im.alt = ''; im.draggable = false; b.appendChild(im); }
-    if (opts.count > 1) { var n = document.createElement('span'); n.className = 'mc-count'; n.textContent = opts.count; b.appendChild(n); }
+    if (opts.count > 1) {
+      // vanilla: the count ends 1px right of the slot and sits on its bottom edge
+      var n = textCanvas(String(opts.count));
+      place(n, 17 - width(String(opts.count)), 9); n.classList.add('mc-count');
+      b.appendChild(n);
+    }
     if (opts.shiny) b.classList.add('shiny');
     b.setAttribute('aria-label', strip(opts.tip ? opts.tip[0] : 'Empty slot'));
     if (opts.tip) b._tip = opts.tip;
@@ -147,37 +175,36 @@
   function button(parent, i, art, canvas, tipLines, onClick, at) {
     var p = at || slotXY(i);
     var off = (canvas - 16) / 2;
-    tex(parent, art, p[0] - off, p[1] - off, canvas, canvas).classList.add('mc-btnart');
+    tex(parent, TEX + art + '.png', p[0] - off, p[1] - off, canvas, canvas);
     return slot(parent, p[0], p[1], { tip: tipLines, onClick: onClick });
   }
-  function text(parent, x, y, str, cls) {
-    var t = el('span', 'mc-text ' + (cls || ''), x, y);
-    t.innerHTML = fmt(str); parent.appendChild(t); return t;
+  function text(parent, x, y, str, align) {
+    var c = textCanvas(str);
+    var w = width(str);
+    place(c, align === 'right' ? x - w : align === 'center' ? x - Math.floor(w / 2) : x, y);
+    parent.appendChild(c); return c;
   }
 
-  // Minecraft colour codes (&a, &7 ...) to spans.
-  var CODES = { '0': '#000000', '1': '#0000AA', '2': '#00AA00', '3': '#00AAAA', '4': '#AA0000', '5': '#AA00AA', '6': '#FFAA00', '7': '#AAAAAA', '8': '#555555', '9': '#5555FF', a: '#55FF55', b: '#55FFFF', c: '#FF5555', d: '#FF55FF', e: '#FFFF55', f: '#FFFFFF' };
+  // The status line under the screen uses the page's own type, with the same colour codes.
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function fmt(s) {
-    var out = '', color = null, parts = String(s).split(/&([0-9a-fr])/);
+  var LOG_COLORS = { a: '#7EE787', b: '#6ABCAE', c: '#FF7B72', d: '#D2A8FF', e: '#DFB35D', f: '#E6F2EF', '6': '#DFB35D', '7': '#9DB8B3', '8': '#6E8580' };
+  function say(msg) {
+    var out = '', color = null, parts = String(msg).split(/&([0-9a-fr])/);
     for (var k = 0; k < parts.length; k++) {
-      if (k % 2) { color = parts[k] === 'r' ? null : CODES[parts[k]]; continue; }
+      if (k % 2) { color = LOG_COLORS[parts[k]] || null; continue; }
       if (parts[k]) out += color ? '<span style="color:' + color + '">' + esc(parts[k]) + '</span>' : esc(parts[k]);
     }
-    return out;
+    log.innerHTML = out;
   }
-  function strip(s) { return String(s).replace(/&[0-9a-fr]/g, ''); }
 
   // ------------------------------------------------------------------ rules
   function changed() {
     // "Any change to an offer clears this."
     S.mine.ready = false; S.theirs.ready = false; S.version++;
   }
-  function say(msg) { log.innerHTML = fmt(msg); }
-
   function itemTip(st, extra) {
     var it = ITEMS[st.id];
-    return ['&' + it.color + it.name + (st.count > 1 ? ' &7×' + st.count : '')].concat(extra || []);
+    return ['&' + it.color + it.name + (st.count > 1 ? ' &7x' + st.count : '')].concat(extra || []);
   }
   function monTip(m, extra) {
     var l = [(m.shiny ? '&6' : '&f') + m.name + ' &7Lv.' + m.lv];
@@ -285,12 +312,17 @@
     var offers = [
       [{ mon: mon('Squirtle', 16, 'great') }, { item: { id: 'emerald', count: 12 } }],
       [{ item: { id: 'diamond', count: 5 } }, { item: { id: 'pearl', count: 8 } }],
-      [{ mon: mon('Lapras', 28, 'ultra') }]
+      [{ mon: mon('Lapras', 28, 'ultra') }, { item: { id: 'expcandy', count: 10 } }]
     ];
     var o = offers[Math.floor(Math.random() * offers.length)];
     S.theirs = { entries: o, money: Math.random() < 0.5 ? 150 : 0, ready: false };
     S.done = null; S.screen = 'trade'; changed();
     say('&b' + THEM + '&7 opened a new trade.');
+    render();
+  }
+  function reset() {
+    S = fresh(); lastFrame = -1;
+    say('&7Trade reset: inventory, party, money and both offers are back to the start.');
     render();
   }
 
@@ -319,13 +351,14 @@
   }
 
   function renderTrade() {
-    tex(gui, 'background', 0, 0, GUI_W, GUI_H);
-    tex(gui, S.mine.ready ? 'head_frame_ready' : 'head_frame_idle', 22, 26, 24, 24);
-    tex(gui, S.theirs.ready ? 'head_frame_ready' : 'head_frame_idle', 130, 26, 24, 24);
+    tex(gui, TEX + 'background.png', 0, 0, GUI_W, GUI_H);
+    tex(gui, TEX + (S.mine.ready ? 'head_frame_ready' : 'head_frame_idle') + '.png', 22, 26, 24, 24);
+    tex(gui, TEX + (S.theirs.ready ? 'head_frame_ready' : 'head_frame_idle') + '.png', 130, 26, 24, 24);
     slot(gui, 26, 30, { icon: ICON.headYou, tip: ['&aYou', S.mine.ready ? '&aConfirmed' : '&7Has not confirmed yet'] });
     slot(gui, 134, 30, { icon: ICON.headThem, tip: ['&b' + THEM, S.theirs.ready ? '&aConfirmed' : '&7Has not confirmed yet'] });
+    // The mod writes the names on the line 36px below the title, which sits at y = 18.
     text(gui, 7, 54, '&fYou');
-    var them = text(gui, 0, 54, '&fThem'); them.style.left = 'auto'; them.style.right = 'calc(var(--s) * ' + (GUI_W - 169) + 'px)';
+    text(gui, 169, 54, '&fThem', 'right');
 
     var mySlots = [18, 19, 20, 21, 27, 28, 29, 30], theirSlots = [23, 24, 25, 26, 32, 33, 34, 35];
     mySlots.forEach(function (sl, k) {
@@ -351,11 +384,11 @@
       button(gui, 4, S.mine.ready ? 'btn_confirm_done' : 'btn_confirm', 64,
         [S.mine.ready ? '&fConfirmed' : '&fConfirm', '&7When you both confirm, a three second', '&7window opens before the trade happens.', '&7Any change to an offer clears this.'], confirm);
     }
-    [3, 5].forEach(function (i) { var p = slotXY(i); slot(gui, p[0], p[1], { tip: null, onClick: function () { (S.stage === 'locked' ? cancelCountdown : confirm)(); } }); });
+    [3, 5].forEach(function (i) { var p = slotXY(i); var b = slot(gui, p[0], p[1], { onClick: function () { (S.stage === 'locked' ? cancelCountdown : confirm)(); } }); b.setAttribute('aria-label', S.stage === 'locked' ? 'Cancel' : 'Confirm'); b.tabIndex = -1; });
 
     button(gui, 47, 'btn_trash', 32, ['&cEmpty your offer', '&7Takes back everything you offered,', '&7money included, and clears both', '&7confirmations.'], trash);
     var pb = slotXY(49);
-    slot(gui, pb[0], pb[1], { icon: ICON.pokeButton, tip: ['&dAdd a Pokemon', '&7Opens your party and your PC boxes.'], onClick: function () { if (S.stage !== 'offering') return; S.screen = 'picker'; render(); } });
+    slot(gui, pb[0], pb[1], { icon: ICON.poke, tip: ['&dAdd a Pokemon', '&7Opens your party and your PC boxes.'], onClick: function () { if (S.stage !== 'offering') return; S.screen = 'picker'; render(); } });
     button(gui, 51, 'btn_money', 32, ['&6Add money', '&fYour offer: ' + S.mine.money, '&b' + THEM + ': ' + S.theirs.money, '&7Money stays yours until the trade happens.'], function () {
       if (S.stage !== 'offering') return; S.moneyDraft = String(S.mine.money || ''); S.screen = 'money'; render();
     });
@@ -369,31 +402,35 @@
   function renderSide() {
     var w = el('div', 'mc-panel', 0, 0, PANEL_W, 102);
     side.appendChild(w);
-    tex(w, 'money_panel', 0, 0, PANEL_W, 102);
-    var t = text(w, 0, 3, '&8Money'); t.classList.add('mc-center'); t.style.width = 'calc(var(--s) * ' + PANEL_W + 'px)';
-    text(w, 8, 39, '&fYou: &e' + S.mine.money.toLocaleString('en'));
-    text(w, 8, 76, '&f' + THEM + ': &e' + S.theirs.money.toLocaleString('en'));
-    text(w, 6, 104, '&7Balance: &f' + S.balance.toLocaleString('en'), 'mc-under');
+    tex(w, TEX + 'money_panel.png', 0, 0, PANEL_W, 102);
+    text(w, 40, 4, '&8Money', 'center');
+    text(w, 7, 40, '&fYou: &e' + S.mine.money.toLocaleString('en'));
+    text(w, 7, 77, '&f' + THEM + ': &e' + S.theirs.money.toLocaleString('en'));
+    text(w, 2, 106, '&7Balance: &f' + S.balance.toLocaleString('en'));
   }
 
   function renderDone() {
     var d = S.done;
     var o = el('div', 'mc-overlay', 0, 0, GUI_W, GUI_H);
     var lines = ['&aTrade complete', '', '&7You gave:'];
-    d.gave.forEach(function (e) { lines.push('&f ' + (e.item ? ITEMS[e.item.id].name + ' ×' + e.item.count : e.mon.name + ' Lv.' + e.mon.lv)); });
-    if (d.gaveMoney) lines.push('&e ' + d.gaveMoney + ' money');
+    d.gave.forEach(function (e) { lines.push('&f' + (e.item ? ITEMS[e.item.id].name + ' x' + e.item.count : e.mon.name + ' Lv.' + e.mon.lv)); });
+    if (d.gaveMoney) lines.push('&e' + d.gaveMoney + ' money');
     lines.push('', '&7You got:');
-    d.got.forEach(function (e) { lines.push('&f ' + (e.item ? ITEMS[e.item.id].name + ' ×' + e.item.count : e.mon.name + ' Lv.' + e.mon.lv)); });
-    if (d.gotMoney) lines.push('&e ' + d.gotMoney + ' money');
-    o.innerHTML = '<div class="mc-done">' + lines.map(function (l) { return '<p>' + (fmt(l) || '&nbsp;') + '</p>'; }).join('') + '</div>';
-    var b = document.createElement('button'); b.type = 'button'; b.className = 'mc-again'; b.textContent = 'Trade again';
+    d.got.forEach(function (e) { lines.push('&f' + (e.item ? ITEMS[e.item.id].name + ' x' + e.item.count : e.mon.name + ' Lv.' + e.mon.lv)); });
+    if (d.gotMoney) lines.push('&e' + d.gotMoney + ' money');
+    var top = Math.max(10, Math.floor((GUI_H - (lines.length * 10 + 30)) / 2));
+    lines.forEach(function (l, i) { if (l) text(o, GUI_W / 2, top + i * 10, l, 'center'); });
+    var by = top + lines.length * 10 + 8;
+    var b = el('button', 'mc-again', 48, by, 80, 20); b.type = 'button';
+    b.appendChild(place(textCanvas('Trade again'), 40 - Math.floor(width('Trade again') / 2), 6));
+    b.setAttribute('aria-label', 'Trade again');
     b.addEventListener('click', again);
-    o.firstChild.appendChild(b);
+    o.appendChild(b);
     gui.appendChild(o);
   }
 
   function renderPicker() {
-    tex(gui, 'picker_background', 0, 0, GUI_W, GUI_H);
+    tex(gui, TEX + 'picker_background.png', 0, 0, GUI_W, GUI_H);
     var ids = offeredIds();
     for (var i = 0; i < 6; i++) pickSlot(i, S.party[i], 'Party', ids);
     var box = S.boxes[S.box];
@@ -424,17 +461,32 @@
   }
 
   function renderMoney() {
-    tex(gui, 'money_input', 0, 0, GUI_W, 174);
-    var field = el('input', 'mc-input', 61, 29, 106, 13);
-    field.type = 'text'; field.inputMode = 'numeric'; field.maxLength = 9; field.value = S.moneyDraft; field.placeholder = '0';
+    tex(gui, TEX + 'money_input.png', 0, 0, GUI_W, 174);
+    // The typed amount is drawn with the bitmap font, like the anvil's own field;
+    // a transparent input on top takes the keys and brings up the number pad on phones.
+    var shown = el('div', 'mc-field', 62, 31, 104, 9);
+    gui.appendChild(shown);
+    var field = el('input', 'mc-input', 60, 27, 108, 16);
+    field.type = 'text'; field.inputMode = 'numeric'; field.maxLength = 9; field.value = S.moneyDraft;
     field.setAttribute('aria-label', 'Amount of money to offer');
-    field.addEventListener('input', function () { field.value = field.value.replace(/[^0-9]/g, ''); S.moneyDraft = field.value; updateConfirmTip(); });
-    field.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); if (e.key === 'Escape') { S.screen = 'trade'; render(); } });
+    field.autocomplete = 'off';
     gui.appendChild(field); input = field;
     var conf = button(gui, -1, 'btn_money_confirm', 32, [], submit, [133, 54]);
-    function updateConfirmTip() { var a = parseInt(S.moneyDraft || '0', 10); conf._tip = ['&aOffer ' + a, '&7Click to confirm the amount.', '&7Whole numbers only. 0 removes the offer.', '&7Balance: ' + S.balance]; }
-    updateConfirmTip();
     button(gui, -1, 'btn_money_back', 32, ['&cBack to the trade'], function () { S.screen = 'trade'; render(); }, [75, 54]);
+    var blink = 0;
+    function draw() {
+      shown.innerHTML = '';
+      var focused = document.activeElement === field;
+      var str = (S.moneyDraft || '') + (focused && blink % 2 === 0 ? '_' : '');
+      if (!S.moneyDraft && !focused) str = '&80';
+      if (str) shown.appendChild(place(textCanvas(str.indexOf('&') === 0 ? str : '&f' + str), 0, 0));
+      var a = parseInt(S.moneyDraft || '0', 10);
+      conf._tip = ['&aOffer ' + a, '&7Click to confirm the amount.', '&7Whole numbers only. 0 removes the offer.', '&7Balance: ' + S.balance];
+    }
+    var timer = setInterval(function () { if (!document.body.contains(field)) { clearInterval(timer); return; } blink++; draw(); }, 400);
+    field.addEventListener('input', function () { field.value = field.value.replace(/[^0-9]/g, ''); S.moneyDraft = field.value; blink = 0; draw(); });
+    field.addEventListener('focus', draw); field.addEventListener('blur', draw);
+    field.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); if (e.key === 'Escape') { S.screen = 'trade'; render(); } });
     function submit() {
       var a = parseInt(S.moneyDraft || '0', 10);
       if (isNaN(a) || a < 0) { say('&cThat is not a whole number.'); return; }
@@ -443,19 +495,41 @@
       say(a ? '&7You offer &e' + a + '&7. Only the difference moves, in one atomic transfer.' : '&7Money offer removed.');
       S.screen = 'trade'; render();
     }
+    draw();
     renderInventory(92, 150);
     setTimeout(function () { if (input) input.focus({ preventScroll: true }); }, 0);
   }
 
   // ------------------------------------------------------------------ tooltip
+  // Drawn like vanilla: dark purple fill, a two-tone border, title line set 2px apart.
+  function tooltipCanvas(lines) {
+    var w = 0; lines.forEach(function (l) { w = Math.max(w, width(l)); });
+    var h = lines.length * 10 + (lines.length > 1 ? 2 : 0) - 2;
+    var c = document.createElement('canvas'); c.width = w + 8; c.height = h + 8;
+    var x = c.getContext('2d');
+    x.fillStyle = 'rgba(16,0,16,.94)';
+    x.fillRect(1, 0, w + 6, h + 8); x.fillRect(0, 1, w + 8, h + 6);
+    var g = x.createLinearGradient(0, 1, 0, h + 7); g.addColorStop(0, 'rgba(80,0,255,.5)'); g.addColorStop(1, 'rgba(40,0,127,.5)');
+    x.fillStyle = g;
+    x.fillRect(1, 1, w + 6, 1); x.fillRect(1, h + 6, w + 6, 1); x.fillRect(1, 1, 1, h + 6); x.fillRect(w + 6, 1, 1, h + 6);
+    var y = 4;
+    lines.forEach(function (l, i) { if (l) drawText(x, l, 4, y); y += 10 + (i === 0 && lines.length > 1 ? 2 : 0); });
+    c.className = 'mc-px';
+    return c;
+  }
   function showTip(b, e) {
     if (!b || !b._tip || !b._tip.length) { hideTip(); return; }
-    tip.innerHTML = b._tip.map(function (l, i) { return '<p' + (i === 0 ? ' class="t"' : '') + '>' + (fmt(l) || '&nbsp;') + '</p>'; }).join('');
+    tip.innerHTML = '';
+    var c = tooltipCanvas(b._tip);
+    var s = parseInt(getComputedStyle(stage).getPropertyValue('--s'), 10) || 2;
+    var ts = Math.max(1, s - 1);
+    c.style.width = c.width * ts + 'px'; c.style.height = c.height * ts + 'px';
+    tip.appendChild(c);
     tip.hidden = false;
     var r = stage.getBoundingClientRect();
-    var x = e.clientX - r.left + 14, y = e.clientY - r.top - 18;
-    var tw = tip.offsetWidth, th = tip.offsetHeight;
-    if (x + tw > r.width) x = e.clientX - r.left - tw - 14;
+    var x = e.clientX - r.left + 12, y = e.clientY - r.top - 12;
+    var tw = c.width * ts, th = c.height * ts;
+    if (x + tw > r.width) x = e.clientX - r.left - tw - 12;
     if (x < 0) x = 0;
     if (y + th > r.height) y = r.height - th;
     tip.style.left = x + 'px'; tip.style.top = Math.max(0, y) + 'px';
@@ -467,17 +541,24 @@
   });
   stage.addEventListener('pointerleave', hideTip);
 
+  var resetBtn = root.querySelector('[data-trade-reset]');
+  if (resetBtn) resetBtn.addEventListener('click', reset);
+
   // ------------------------------------------------------------------ scale
   // Integer scale only, like Minecraft's GUI scale, so every texture pixel stays square.
   function fit() {
     var w = root.querySelector('.mc-fit').clientWidth;
     var both = Math.floor(w / (GUI_W + GAP + PANEL_W));
-    var s = both >= 2 ? Math.min(4, both) : Math.max(1, Math.min(4, Math.floor(w / GUI_W)));
+    var s = both >= 2 ? Math.min(4, both) : Math.min(4, Math.floor(w / GUI_W));
+    // On narrow phones whole-number scales jump from 2 straight to 1, so fill the width instead.
+    if (s < 2) s = Math.max(1, Math.floor(w / GUI_W * 100) / 100);
     stage.style.setProperty('--s', s);
     stage.classList.toggle('stacked', both < 2);
   }
   window.addEventListener('resize', fit);
   fit();
-  render();
-  say('&7Click an item in your inventory to offer it. &b' + THEM + '&7 has already made an offer.');
+  loadFont(function () {
+    render();
+    say('&7Click an item in your inventory to offer it. &b' + THEM + '&7 has already made an offer.');
+  });
 })();
