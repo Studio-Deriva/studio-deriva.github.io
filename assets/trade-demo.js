@@ -12,7 +12,7 @@
   var GUI_W = 176, GUI_H = 234, PANEL_W = 79, GAP = 6;
   var MAX_OFFER = 8;
   var COUNTDOWN_MS = 3000, CANCEL_FRAMES = 8;
-  var THEM = 'Mira';
+  var THEM = 'Alex';
 
   var ICON = {
     diamond: MC + 'diamond.png', emerald: MC + 'emerald.png', gold: MC + 'gold_ingot.png', iron: MC + 'iron_ingot.png',
