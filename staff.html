@@ -30,7 +30,7 @@
 .group-head h2::before { content: ""; width: .7rem; height: .7rem; border-radius: 50%; background: var(--role); box-shadow: 0 0 14px var(--role); flex: none; }
 .group-head span { font: 400 .8rem/1 var(--f-mono); color: var(--mist); }
 
-.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 1rem; list-style: none; margin: 0; padding: 0; }
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 1rem; list-style: none; margin: 0; padding: 0; align-items: start; }
 .person {
   --role: #99AAB5;
   background: var(--deep); border-radius: 22px; padding: 1.6rem 1.3rem 1.3rem;
@@ -46,6 +46,12 @@
 .roles li { display: inline-flex; align-items: center; gap: .35rem; font: 500 .74rem/1 var(--f-body); padding: .35rem .6rem; border-radius: 100px; background: rgba(5, 8, 28, .55); border: 1px solid var(--line); }
 .roles li::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: var(--c); }
 .person .more { margin-top: .9rem; font-size: .88rem; color: var(--frost); }
+.roles li.extra { display: none; }
+.person.open .roles li.extra { display: inline-flex; }
+.see-more { margin-top: .5rem; font: 500 .78rem/1 var(--f-mono); color: var(--mist); background: none; border: 0; padding: .3rem .4rem; cursor: pointer; border-radius: 6px; }
+.see-more:hover { color: var(--frost); }
+.see-more::after { content: " ▾"; }
+.person.open .see-more::after { content: " ▴"; }
 
 .empty { padding-block: 0 clamp(5rem, 10vw, 8rem); }
 .empty-card { background: var(--deep); border-radius: 28px; padding: clamp(2rem, 5vw, 3.5rem); display: grid; gap: .9rem; justify-items: start; max-width: 720px; }
@@ -118,6 +124,6 @@
 </footer>
 
 <script src="assets/site.js?v=202610152148"></script>
-<script src="assets/staff.js?v=202610152148"></script>
+<script src="assets/staff.js?v=202610152230"></script>
 </body>
 </html>

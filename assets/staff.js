@@ -17,15 +17,18 @@
     return Math.round(h / 24) + ' days ago';
   }
 
+  var SHOWN = 2; // role pills visible before "See more"
   function person(m, groupColor) {
-    var roles = m.roles.map(function (r) {
-      return '<li style="--c:' + hex(r.color) + '">' + esc(r.name) + '</li>';
+    var roles = m.roles.map(function (r, i) {
+      return '<li style="--c:' + hex(r.color) + '"' + (i >= SHOWN ? ' class="extra"' : '') + '>' + esc(r.name) + '</li>';
     }).join('');
+    var extra = m.roles.length - SHOWN;
+    var more = extra > 0 ? '<button class="see-more" type="button" aria-expanded="false" data-more="' + extra + '">See ' + extra + ' more</button>' : '';
     return '<li class="person" style="--role:' + groupColor + '">' +
       '<div class="avatar"><img src="' + esc(m.avatar) + '" alt="" width="90" height="90" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.visibility=\'hidden\'"></div>' +
       '<h3>' + esc(m.name) + '</h3>' +
       '<p class="handle">@' + esc(m.username) + '</p>' +
-      '<ul class="roles" aria-label="Roles">' + roles + '</ul>' +
+      '<ul class="roles" aria-label="Roles">' + roles + '</ul>' + more +
       '<a class="more" href="https://discord.com/users/' + esc(m.id) + '" target="_blank" rel="noopener">Discord profile</a>' +
       '</li>';
   }
@@ -45,6 +48,15 @@
       syncedEl.hidden = false;
     }
   }
+
+  groupsEl.addEventListener('click', function (e) {
+    var b = e.target.closest('.see-more');
+    if (!b) return;
+    var card = b.closest('.person');
+    var open = card.classList.toggle('open');
+    b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    b.textContent = open ? 'See less' : 'See ' + b.dataset.more + ' more';
+  });
 
   fetch('data/staff.json', { cache: 'no-cache' })
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
