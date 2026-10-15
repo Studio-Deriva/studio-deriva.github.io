@@ -1,9 +1,9 @@
 {
-  "updated": "2026-10-15T22:03:16.914Z",
+  "updated": "2026-10-15T22:05:06.095Z",
   "groups": [
     {
       "role": {
-        "id": "1549038402605682768",
+        "id": "owner",
         "name": "Owner",
         "color": 16151296
       },
@@ -19,12 +19,12 @@
               "color": 16151296
             },
             {
-              "name": "3D Modeler",
-              "color": 14715452
+              "name": "Head 3d Modeler (blockbench)",
+              "color": 4049966
             },
             {
-              "name": "Texture Artist",
-              "color": 8019140
+              "name": "Head Texture Artist (pixel)",
+              "color": 15015715
             }
           ]
         },
@@ -37,6 +37,30 @@
             {
               "name": "Owner",
               "color": 16151296
+            },
+            {
+              "name": "Sr Developer (general)",
+              "color": 2123412
+            },
+            {
+              "name": "Sr Mod Developer",
+              "color": 2123412
+            },
+            {
+              "name": "3d Modeler (blender)",
+              "color": 15105570
+            },
+            {
+              "name": "3d Modeler (blockbench)",
+              "color": 4049966
+            },
+            {
+              "name": "Texture Artist (pixel)",
+              "color": 15015715
+            },
+            {
+              "name": "Animator (blender)",
+              "color": 15834127
             }
           ]
         }
@@ -44,25 +68,66 @@
     },
     {
       "role": {
-        "id": "1549059581840461975",
-        "name": "3D Modeler",
-        "color": 14715452
+        "id": "development",
+        "name": "Development",
+        "color": 2123412
+      },
+      "members": [
+        {
+          "id": "1249032817053274162",
+          "name": "Trombettaa",
+          "username": "trombettaa",
+          "avatar": "https://cdn.discordapp.com/avatars/1249032817053274162/5c8848a64203108f3c7d3613c8c2ec1f.png?size=256",
+          "roles": [
+            {
+              "name": "Mod Developer",
+              "color": 2123412
+            },
+            {
+              "name": "Apprentice",
+              "color": 15844367
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "role": {
+        "id": "3d-modeling",
+        "name": "3D Modeling",
+        "color": 15105570
       },
       "members": []
     },
     {
       "role": {
-        "id": "1549059582910009395",
-        "name": "Texture Artist",
-        "color": 8019140
+        "id": "textures",
+        "name": "Textures",
+        "color": 10181046
       },
       "members": []
     },
     {
       "role": {
-        "id": "1549059583853596846",
-        "name": "Animator",
-        "color": 3123360
+        "id": "animation",
+        "name": "Animation",
+        "color": 3066993
+      },
+      "members": []
+    },
+    {
+      "role": {
+        "id": "moderation",
+        "name": "Moderation",
+        "color": 2067276
+      },
+      "members": []
+    },
+    {
+      "role": {
+        "id": "apprentices",
+        "name": "Apprentices",
+        "color": 15844367
       },
       "members": []
     }
