@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Studio Deriva Staff</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="The staff of Studio Deriva: developers, artists and moderators, with their roles and Discord profiles.">
+<meta property="og:title" content="Studio Deriva Staff">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://studio-deriva.github.io/staff.html">
+<meta property="og:image" content="https://studio-deriva.github.io/assets/og-banner.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#05081C">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site.css?v=202610152148">
+<style>
+/* Staff: one band per Discord role, highest first; each person is a card with their Discord avatar, ringed in their role colour. */
+.intro { padding-block: calc(56px + clamp(4rem, 9vw, 7rem)) clamp(2rem, 5vw, 3.5rem); }
+.intro h1 { font-size: clamp(3.4rem, 10vw, 8rem); font-weight: 900; font-stretch: 120%; letter-spacing: -.035em; margin-block: 1rem 1.4rem; }
+.synced { margin-top: 1.6rem; font: 400 .78rem/1.5 var(--f-mono); color: var(--mist); display: flex; align-items: center; gap: .55rem; }
+.synced i { width: .5rem; height: .5rem; border-radius: 50%; background: #3BA55D; box-shadow: 0 0 10px #3BA55D; flex: none; }
+
+.groups { display: grid; gap: clamp(3rem, 7vw, 5rem); padding-block: 0 clamp(5rem, 10vw, 8rem); }
+.group-head { display: flex; align-items: baseline; gap: .8rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
+.group-head h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); display: flex; align-items: center; gap: .7rem; }
+.group-head h2::before { content: ""; width: .7rem; height: .7rem; border-radius: 50%; background: var(--role); box-shadow: 0 0 14px var(--role); flex: none; }
+.group-head span { font: 400 .8rem/1 var(--f-mono); color: var(--mist); }
+
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 1rem; list-style: none; margin: 0; padding: 0; }
+.person {
+  --role: #99AAB5;
+  background: var(--deep); border-radius: 22px; padding: 1.6rem 1.3rem 1.3rem;
+  display: grid; justify-items: center; text-align: center; gap: .35rem; align-content: start;
+  border: 1px solid transparent; transition: border-color .2s, transform .2s var(--ease);
+}
+.person:hover { border-color: color-mix(in srgb, var(--role) 45%, transparent); transform: translateY(-2px); }
+.avatar { width: 96px; height: 96px; border-radius: 50%; padding: 3px; background: var(--role); margin-bottom: .7rem; box-shadow: 0 10px 30px color-mix(in srgb, var(--role) 25%, transparent); }
+.avatar img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--deep); object-fit: cover; background: var(--ink); }
+.person h3 { font-size: 1.2rem; font-stretch: 108%; overflow-wrap: anywhere; }
+.handle { font: 400 .82rem/1.3 var(--f-mono); color: var(--mist); overflow-wrap: anywhere; }
+.roles { display: flex; flex-wrap: wrap; justify-content: center; gap: .35rem; list-style: none; margin: .7rem 0 0; padding: 0; }
+.roles li { display: inline-flex; align-items: center; gap: .35rem; font: 500 .74rem/1 var(--f-body); padding: .35rem .6rem; border-radius: 100px; background: rgba(5, 8, 28, .55); border: 1px solid var(--line); }
+.roles li::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: var(--c); }
+.person .more { margin-top: .9rem; font-size: .88rem; color: var(--frost); }
+
+.empty { padding-block: 0 clamp(5rem, 10vw, 8rem); }
+.empty-card { background: var(--deep); border-radius: 28px; padding: clamp(2rem, 5vw, 3.5rem); display: grid; gap: .9rem; justify-items: start; max-width: 720px; }
+.empty-card h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+.empty-card p { color: var(--mist); max-width: 55ch; }
+
+.join { background: var(--deep); text-align: center; }
+.join .wrap { display: grid; gap: 1.2rem; justify-items: center; }
+.join h2 { font-weight: 900; font-stretch: 118%; }
+</style>
+</head>
+<body>
+
+<header class="site-header always">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="17" height="25">Studio Deriva</a>
+    <ul class="nav-links">
+      <li><a href="mods.html">Mods</a></li>
+      <li><a href="staff.html" aria-current="page">Staff</a></li>
+      <li><a href="index.html#open-source">Open source</a></li>
+      <li><a href="index.html#commissions">Commissions</a></li>
+      <li><a href="index.html#ideas">Ideas</a></li>
+      <li><a href="index.html#team">Join the team</a></li>
+    </ul>
+    <a class="btn btn-primary" href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Discord</a>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    <div class="wrap">
+      <p class="eyebrow">The people behind the mods</p>
+      <h1>Staff</h1>
+      <p class="lede">Developers, artists and moderators who keep Studio Deriva running, most of them in their spare time. Find them on our Discord; for help, open a ticket rather than a DM.</p>
+      <p class="synced" id="synced" hidden><i></i><span></span></p>
+    </div>
+  </div>
+
+  <div class="wrap groups" id="groups" aria-live="polite"></div>
+
+  <div class="wrap empty" id="empty" hidden>
+    <div class="empty-card">
+      <p class="eyebrow">Straight from Discord</p>
+      <h2>The staff list is on its way.</h2>
+      <p>This page is filled from our Discord server: everyone with a staff role, their avatar and their roles. It refreshes every six hours, so new staff show up on their own.</p>
+      <a class="btn btn-primary" href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Meet them on Discord</a>
+    </div>
+  </div>
+
+  <section class="join">
+    <div class="wrap">
+      <p class="eyebrow">Volunteer team</p>
+      <h2>Want your name here?</h2>
+      <p class="lede">Applications are open for developers, modelers, texture artists, animators and moderators.</p>
+      <a class="btn btn-primary" href="index.html#team">See the open roles</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Studio Deriva · Free and open source · MIT</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="mods.html">Mods</a>
+      <a href="https://github.com/Studio-Deriva" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="assets/site.js?v=202610152148"></script>
+<script src="assets/staff.js?v=202610152148"></script>
+</body>
+</html>
