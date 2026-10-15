@@ -15,7 +15,7 @@
 <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Pixelify+Sans:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 <style>
 /* Mods: each mod takes over the page in its own colours. A pinned stage grows the logo with scroll, then the details. */
@@ -118,6 +118,42 @@
 .flow-head { display: grid; gap: .8rem; margin-bottom: 1.6rem; }
 .flow-head h3 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 900; font-stretch: 115%; }
 .flow-head p { color: var(--muted); max-width: 55ch; }
+
+/* Playable trade screen. Everything is sized in texture pixels times --s, an integer scale. */
+.trade-demo { background: #0B1416; border: 1px solid rgba(106, 188, 174, .14); border-radius: 32px; padding: clamp(1.4rem, 4vw, 3rem) clamp(1rem, 3vw, 2.4rem); display: grid; gap: 1.6rem; }
+.trade-demo .flow-head { margin: 0; }
+.mc-fit { width: 100%; min-width: 0; }
+.mc-stage { --s: 3; position: relative; display: flex; align-items: flex-start; gap: calc(var(--s) * 6px); width: fit-content; margin-inline: auto; user-select: none; -webkit-user-select: none; }
+.mc-stage.stacked { flex-direction: column; align-items: center; }
+.mc-stage.stacked .mc-side { order: 2; }
+.mc-side { position: relative; width: calc(var(--s) * 79px); height: calc(var(--s) * 112px); flex: none; }
+[data-screen="picker"] .mc-side, [data-screen="money"] .mc-side { visibility: hidden; }
+.mc-gui { position: relative; width: calc(var(--s) * 176px); height: calc(var(--s) * 234px); flex: none; }
+.mc-gui > *, .mc-panel, .mc-panel > * { position: absolute; }
+.mc-tex { image-rendering: pixelated; pointer-events: none; max-width: none; }
+.mc-slot { padding: 0; margin: 0; border: 0; background: transparent; cursor: pointer; }
+.mc-slot:disabled { cursor: default; }
+.mc-slot img { width: 100%; height: 100%; display: block; image-rendering: pixelated; pointer-events: none; max-width: none; }
+.mc-slot:not(:disabled):hover::after, .mc-slot:focus-visible::after { content: ""; position: absolute; inset: 0; background: rgba(255, 255, 255, .45); }
+.mc-slot:focus-visible { outline: none; }
+.mc-slot.shiny img { filter: drop-shadow(0 0 calc(var(--s) * 1px) #FFD23A); }
+.mc-slot.dim img { opacity: .35; }
+.mc-count { position: absolute; right: calc(var(--s) * -1px); bottom: calc(var(--s) * -2px); font: 400 calc(var(--s) * 8px)/1 "Pixelify Sans", monospace; color: #fff; text-shadow: calc(var(--s) * 1px) calc(var(--s) * 1px) 0 #3F3F3F; pointer-events: none; }
+.mc-text { font: 400 calc(var(--s) * 8px)/1 "Pixelify Sans", monospace; color: #fff; text-shadow: calc(var(--s) * 1px) calc(var(--s) * 1px) 0 #3F3F3F; white-space: nowrap; pointer-events: none; }
+.mc-center { text-align: center; }
+.mc-under { color: #9DB8B3; text-shadow: none; font-size: calc(var(--s) * 7px); }
+.mc-input { background: transparent; border: 0; color: #fff; font: 400 calc(var(--s) * 8px)/1 "Pixelify Sans", monospace; padding: 0 calc(var(--s) * 2px); outline: none; caret-color: #fff; text-shadow: calc(var(--s) * 1px) calc(var(--s) * 1px) 0 #3F3F3F; }
+.mc-input::placeholder { color: rgba(255, 255, 255, .45); }
+.mc-tip { position: absolute; z-index: 6; pointer-events: none; background: rgba(16, 0, 16, .95); border: 2px solid #3C0A8C; box-shadow: inset 0 0 0 1px #5000FF; padding: 5px 8px; font: 400 calc(var(--s) * 4px + 4px)/1.3 "Pixelify Sans", monospace; color: #fff; text-shadow: 2px 2px 0 #3F3F3F; white-space: nowrap; }
+.mc-tip p { margin: 0; }
+.mc-tip p.t { margin-bottom: .35em; }
+.mc-overlay { z-index: 4; background: rgba(5, 10, 12, .86); display: grid; place-items: center; }
+.mc-done { text-align: center; font: 400 calc(var(--s) * 7px)/1.25 "Pixelify Sans", monospace; color: #fff; text-shadow: calc(var(--s) * 1px) calc(var(--s) * 1px) 0 #222; }
+.mc-done p { margin: 0; }
+.mc-again { margin-top: calc(var(--s) * 8px); font: 500 calc(var(--s) * 7px)/1 "Pixelify Sans", monospace; color: #0B1416; background: #6ABCAE; border: 0; padding: calc(var(--s) * 3px) calc(var(--s) * 6px); border-radius: calc(var(--s) * 2px); cursor: pointer; }
+.mc-again:hover { background: #DFB35D; }
+.mc-log { min-height: 1.6em; text-align: center; font: 500 1rem/1.5 "Pixelify Sans", monospace; color: #E6F2EF; text-wrap: balance; }
+.mc-keys { text-align: center; font: 400 .78rem/1.4 var(--f-mono); color: var(--muted); margin-top: -1rem; }
 
 .next { background: var(--ink); text-align: center; }
 .next .wrap { display: grid; gap: 1.4rem; justify-items: center; }
@@ -247,6 +283,24 @@
       <div class="wrap">
         <p class="big-lede reveal">Server-side player trading for Cobblemon. <span>Pokémon, items and money in the same offer, a full history in a database, and no client mod required: vanilla clients see a normal container.</span></p>
 
+        <div class="trade-demo reveal" id="trade-demo">
+          <div class="flow-head">
+            <p class="eyebrow">Try a trade</p>
+            <h3>The real trade screen, in your browser.</h3>
+            <p>Same textures and same slot grid as the mod. Offer items, Pok&eacute;mon and money, confirm, and watch the three second countdown. The other player, Mira, is played by the page.</p>
+          </div>
+          <div class="mc-fit">
+            <div class="mc-stage">
+              <div class="mc-side"></div>
+              <div class="mc-gui"></div>
+              <div class="mc-tip" hidden></div>
+            </div>
+          </div>
+          <p class="mc-log" role="status" aria-live="polite"></p>
+          <p class="mc-keys">Click: whole stack · Right click: one · Shift click: half · Hover for details</p>
+        </div>
+
+
         <div class="reveal">
           <div class="flow-head">
             <p class="eyebrow">How a trade stays safe</p>
@@ -320,6 +374,7 @@
 </footer>
 
 <script src="assets/site.js"></script>
+<script src="assets/trade-demo.js"></script>
 <script>
 /* Carving bench demo: a 16x16 pumpkin face you can cut, paint and light. */
 (function () {
