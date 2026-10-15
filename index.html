@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Studio Deriva</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Studio Deriva makes Minecraft mods. All of them free, all of them open source, source included. Private commissions on request.">
+<meta property="og:title" content="Studio Deriva">
+<meta property="og:description" content="Minecraft mods. Free, open source, source included.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://studio-deriva.github.io/">
+<meta property="og:image" content="https://studio-deriva.github.io/assets/og-banner.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#05081C">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* Home: full-bleed number field with the mark, a scroll-lit statement, then the studio. */
+
+/* Hero */
+.hero {
+  --tint: #3D5BFF;
+  position: relative;
+  min-height: max(620px, 100svh);
+  display: grid; place-items: center;
+  overflow: hidden;
+  background: radial-gradient(120% 80% at 50% 45%, #0B1250 0%, var(--ink) 62%);
+  cursor: crosshair;
+  outline: none;
+}
+.hero canvas { position: absolute; inset: 0; display: block; }
+.hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 30%; background: linear-gradient(transparent, var(--ink)); pointer-events: none; }
+.hero-stage {
+  --p: 0;
+  position: relative; z-index: 1;
+  display: grid; justify-items: center; text-align: center; gap: 1.4rem;
+  padding: 6rem max(16px, env(safe-area-inset-right, 0px)) 5rem max(16px, env(safe-area-inset-left, 0px));
+  transform: translateY(calc(var(--p) * -90px)) scale(calc(1 - var(--p) * .12));
+  opacity: calc(1 - var(--p) * 1.4);
+  pointer-events: none;
+}
+.hero-stage a { pointer-events: auto; }
+.hero-mark {
+  width: clamp(120px, 17vw, 210px); height: auto;
+  filter: drop-shadow(0 0 50px color-mix(in srgb, var(--tint) 55%, transparent)) drop-shadow(0 30px 40px rgba(0, 0, 0, .5));
+  transition: filter 1.2s var(--ease);
+  animation: drift 8s ease-in-out infinite;
+}
+@keyframes drift { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(1.2deg); } }
+.hero h1 { font-size: clamp(3.2rem, 11vw, 9rem); font-weight: 900; font-stretch: 120%; letter-spacing: -.035em; line-height: .92; margin-top: .6rem; }
+.hero .lede { color: #C4CBF0; text-align: center; max-width: 40ch; }
+.hero-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin-top: .6rem; }
+.hint {
+  position: absolute; z-index: 1; left: 50%; bottom: calc(1.6rem + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  font: 400 .72rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--mist);
+  display: flex; align-items: center; gap: .6rem; white-space: nowrap; pointer-events: none;
+}
+.hint i { width: .5rem; height: .5rem; border-radius: 50%; background: var(--tint); transition: background 1.2s; box-shadow: 0 0 12px var(--tint); }
+
+/* Statement lit by scroll */
+.statement { height: 260vh; position: relative; }
+.statement-pin { position: sticky; top: 0; height: 100svh; display: grid; align-items: center; }
+.statement p {
+  font: 800 clamp(2rem, 5.6vw, 4.6rem)/1.08 var(--f-display); font-stretch: 110%; letter-spacing: -.02em;
+  max-width: 20ch; text-wrap: balance;
+}
+.statement .w { color: var(--frost); opacity: .16; transition: opacity .35s var(--ease), color .35s; }
+.statement .w.on { opacity: 1; }
+
+/* Mod tiles */
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
+@media (max-width: 860px) { .tiles { grid-template-columns: minmax(0, 1fr); } }
+.tile {
+  position: relative; overflow: hidden; border-radius: 28px;
+  min-height: 560px; padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3.5vw, 2.6rem);
+  display: grid; grid-template-rows: auto auto 1fr auto; justify-items: center; text-align: center; gap: .8rem;
+  text-decoration: none;
+}
+.tile h3 { font-size: clamp(2rem, 4vw, 2.9rem); font-weight: 900; font-stretch: 115%; }
+.tile p { font-size: 1.1rem; max-width: 30ch; }
+.tile .links { display: flex; gap: 1.6rem; justify-content: center; flex-wrap: wrap; }
+.tile img { width: clamp(150px, 22vw, 220px); align-self: center; transition: transform .6s var(--ease); }
+.tile:hover img { transform: scale(1.06) rotate(-2deg); }
+.tile-carves { background: #F66B38; color: #3B1220; }
+.tile-carves::before {
+  content: ""; position: absolute; inset: 0; opacity: .5; pointer-events: none;
+  background-image: linear-gradient(#C0523C 0 0), linear-gradient(#C0523C 0 0), linear-gradient(#903F47 0 0), linear-gradient(#C0523C 0 0);
+  background-size: 28px 28px; background-repeat: no-repeat;
+  background-position: 8% 82%, 14% 88%, 90% 12%, 84% 18%;
+}
+.tile-carves .eyebrow, .tile-carves .more { color: #3B1220; }
+.tile-carves img { image-rendering: pixelated; border-radius: 18px; box-shadow: 0 30px 60px rgba(59, 18, 32, .35); }
+.tile-trades { background: linear-gradient(180deg, #172529, #0B1416); color: #E6F2EF; }
+.tile-trades .eyebrow { color: #6ABCAE; }
+.tile-trades .more { color: #6ABCAE; }
+.tile-trades img { filter: drop-shadow(0 30px 60px rgba(0, 0, 0, .5)); border-radius: 22%; box-shadow: 0 0 0 1px rgba(106, 188, 174, .2); }
+.tile > * { position: relative; }
+.tile-blurb { margin: 0 auto 1.2rem; }
+.all-mods { display: flex; justify-content: center; margin-top: 2.2rem; }
+.all-mods .more { color: var(--frost); font-size: 1.05rem; }
+
+/* Numbers */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem 1.5rem; }
+@media (max-width: 860px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stat { display: grid; gap: .4rem; border-top: 1px solid var(--line); padding-top: 1.2rem; align-content: start; }
+.stat b { font: 900 clamp(3rem, 7vw, 5.5rem)/1 var(--f-display); font-stretch: 125%; color: var(--cobalt); font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
+.stat span { color: var(--mist); font-size: .95rem; max-width: 24ch; }
+.stat code { color: var(--frost); }
+
+/* Open source split */
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+@media (max-width: 860px) { .split { grid-template-columns: minmax(0, 1fr); } }
+.split-art { border-radius: 28px; overflow: hidden; aspect-ratio: 1 / 1; max-width: 100%; }
+.split-art img { width: 100%; height: 100%; object-fit: cover; }
+.prose { display: grid; gap: 1.2rem; }
+.prose p { color: var(--mist); max-width: 60ch; }
+.prose p strong { color: var(--frost); font-weight: 600; }
+.pillars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border-radius: 16px; overflow: hidden; margin-top: .6rem; }
+.pillars div { background: var(--deep); padding: 1rem 1.1rem; }
+.pillars b { display: block; font: 700 1rem/1.3 var(--f-display); font-stretch: 108%; }
+.pillars span { font-size: .88rem; color: var(--mist); }
+
+/* Commissions */
+.offer { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 1rem; margin-bottom: 4rem; }
+.offer div { padding: 1.6rem 1.4rem; border-radius: 20px; background: var(--ink); display: grid; gap: .5rem; align-content: start; }
+.offer h3 { font-size: 1.15rem; }
+.offer p { color: var(--mist); font-size: .94rem; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); counter-reset: step; border-top: 1px solid var(--deep-2); }
+.steps li { counter-increment: step; padding: 1.4rem 1.4rem 0 0; display: grid; gap: .45rem; align-content: start; }
+.steps li::before { content: "0" counter(step); font: 500 .8rem/1 var(--f-mono); color: var(--cobalt); }
+.steps b { font: 700 1.05rem/1.3 var(--f-display); font-stretch: 108%; }
+.steps span { color: var(--mist); font-size: .94rem; }
+.note { margin-top: 2.5rem; padding: 1.1rem 1.3rem; border-left: 3px solid var(--cobalt); background: rgba(39, 67, 244, .08); color: #C4CBF0; font-size: .95rem; max-width: 80ch; border-radius: 0 12px 12px 0; }
+.row-cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2.2rem; }
+
+/* Ideas */
+.ideas { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+@media (max-width: 900px) { .ideas { grid-template-columns: minmax(0, 1fr); } }
+.template { background: #03051A; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; min-width: 0; }
+.template-bar { display: flex; justify-content: space-between; align-items: center; padding: .7rem 1rem; border-bottom: 1px solid var(--line); font: 400 .75rem/1 var(--f-mono); color: var(--mist); }
+.copy-btn { font: 500 .75rem/1 var(--f-mono); background: var(--deep-2); color: var(--frost); border: 0; padding: .45rem .8rem; border-radius: 100px; cursor: pointer; }
+.copy-btn:hover { background: var(--cobalt); }
+.template pre { margin: 0; padding: 1.1rem; overflow-x: auto; font: 400 .85rem/1.75 var(--f-mono); color: #C4CBF0; }
+.template pre b { color: var(--frost); font-weight: 500; }
+.status { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; }
+.status li { display: grid; grid-template-columns: 2.2rem 1fr; gap: .8rem; align-items: baseline; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+.status li span:first-child { font-size: 1.15rem; }
+.status li b { font-weight: 600; }
+.status li small { display: block; color: var(--mist); font-size: .88rem; }
+.rules { margin: 1.6rem 0 0; padding: 0; list-style: none; display: grid; gap: .5rem; color: var(--mist); font-size: .94rem; }
+.rules li { padding-left: 1.2rem; position: relative; }
+.rules li::before { content: "/"; position: absolute; left: 0; color: var(--cobalt); font-family: var(--f-mono); }
+
+/* Team */
+.roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1rem; }
+.roles div { background: var(--ink); padding: 1.6rem 1.4rem; display: grid; gap: .4rem; border-radius: 20px; align-content: start; }
+.roles h3 { font-size: 1.15rem; }
+.roles p { color: var(--mist); font-size: .94rem; }
+.langs-head { margin: 4rem 0 1.1rem; display: grid; gap: .5rem; }
+.langs-head p { color: var(--mist); max-width: 65ch; font-size: .95rem; }
+.langs { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; margin: 0; padding: 0; }
+.langs li { display: inline-flex; align-items: center; gap: .45rem; font: 400 .82rem/1 var(--f-mono); padding: .55rem .8rem; border: 1px solid var(--line); border-radius: 100px; }
+.langs li::before { content: ""; width: .6rem; height: .6rem; border-radius: 50%; background: var(--c); }
+
+/* Support */
+.tickets { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 1rem; }
+.tickets div { padding: 1.3rem; border-radius: 16px; background: var(--deep); display: grid; gap: .35rem; align-content: start; }
+.tickets b { font: 700 1rem/1.3 var(--f-display); font-stretch: 108%; }
+.tickets span { color: var(--mist); font-size: .9rem; }
+.bugline { margin-top: 2rem; font: 400 .85rem/1.6 var(--f-mono); color: var(--mist); }
+.bugline b { color: var(--frost); font-weight: 500; }
+
+/* Closing */
+.cta { position: relative; overflow: hidden; background: var(--ink) url("assets/hero-tiles.webp") center 70% / cover no-repeat; }
+.cta::before { content: ""; position: absolute; inset: 0; background: linear-gradient(var(--ink), rgba(5, 8, 28, .55) 40%, rgba(5, 8, 28, .7)); }
+.cta .wrap { position: relative; display: grid; gap: 1.5rem; justify-items: center; text-align: center; }
+.cta h2 { font-size: clamp(2.4rem, 6.5vw, 5rem); font-weight: 900; font-stretch: 118%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-mark { animation: none; }
+  .statement { height: auto; }
+  .statement-pin { position: static; height: auto; padding-block: 6rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="#top"><img src="assets/logo.svg" alt="" width="17" height="25">Studio Deriva</a>
+    <ul class="nav-links">
+      <li><a href="mods.html">Mods</a></li>
+      <li><a href="#open-source">Open source</a></li>
+      <li><a href="#commissions">Commissions</a></li>
+      <li><a href="#ideas">Ideas</a></li>
+      <li><a href="#team">Join the team</a></li>
+    </ul>
+    <a class="btn btn-primary" href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Discord</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero" data-field data-progress="leave" tabindex="0" aria-label="Character field. Move the cursor to light it, click to colour it.">
+    <canvas aria-hidden="true"></canvas>
+    <div class="hero-stage">
+      <img class="hero-mark" src="assets/logo.svg" alt="Studio Deriva logo, a blue octahedron" width="210" height="311">
+      <h1>Studio Deriva</h1>
+      <p class="lede">Minecraft mods. Free, open source, source included.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="mods.html">See the mods</a>
+        <a class="btn btn-ghost" href="#commissions">Commission work</a>
+      </div>
+    </div>
+    <p class="hint"><i></i>Move the cursor · click anywhere</p>
+  </div>
+
+  <div class="statement" data-progress>
+    <div class="statement-pin">
+      <div class="wrap">
+        <p data-words>We make Minecraft mods. All of them free. All of them open source, source included. No premium version, no ad wall, ever.</p>
+      </div>
+    </div>
+  </div>
+
+  <section id="mods">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <p class="eyebrow">What we've shipped</p>
+        <h2>Our mods</h2>
+      </div>
+      <div class="tiles">
+        <a class="tile tile-carves reveal-scale" href="mods.html#carves-and-crafts">
+          <p class="eyebrow">Fabric 1.21.11</p>
+          <h3>Carves &amp; Crafts</h3>
+          <img src="assets/mods/carves-and-crafts.png" alt="Carves & Crafts logo, a pixel-art carved pumpkin face" width="220" height="220" loading="lazy">
+          <div>
+            <p class="tile-blurb">Cut and paint pumpkins pixel by pixel, then light them up.</p>
+            <div class="links"><span class="more">Learn more</span></div>
+          </div>
+        </a>
+        <a class="tile tile-trades reveal-scale" href="mods.html#bettertrades">
+          <p class="eyebrow">Cobblemon · Fabric 1.21.1</p>
+          <h3>BetterTrades</h3>
+          <img src="assets/mods/bettertrades.svg" alt="BetterTrades logo, a teal and an amber arrow pointing opposite ways" width="220" height="220" loading="lazy">
+          <div>
+            <p class="tile-blurb">Pokémon, items and money in one safe, server-side trade.</p>
+            <div class="links"><span class="more">Learn more</span></div>
+          </div>
+        </a>
+      </div>
+      <div class="all-mods"><a class="more" href="mods.html">All mods, specs and audits</a></div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="stats">
+        <div class="stat reveal"><b data-count="2">2</b><span>mods shipped, both under the MIT licence</span></div>
+        <div class="stat reveal"><b data-count="79">79</b><span>unit tests you can run with <code>./gradlew test</code></span></div>
+        <div class="stat reveal"><b data-count="66">66</b><span>bugs found in our own audits, written up and published</span></div>
+        <div class="stat reveal"><b>0</b><span>premium versions, paywalls or ad-wall downloads</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="open-source">
+    <div class="wrap split">
+      <div class="split-art reveal-scale"><img src="assets/octahedron-dunes.webp" alt="" width="1200" height="1156" loading="lazy"></div>
+      <div class="prose reveal">
+        <p class="eyebrow">Open source first</p>
+        <h2>Free forever. Credit where it's due.</h2>
+        <p>Every mod and every line of code we make is free, for everyone. <strong>Source included, no paywall, no premium version.</strong> Read it, learn from it, fork it and build on it.</p>
+        <p>The one exception is private commissioned work. Code someone asked and paid us to write belongs to them, so it stays theirs to publish or not.</p>
+        <div class="pillars">
+          <div><b>Code</b><span>Java and Kotlin, Fabric and NeoForge</span></div>
+          <div><b>Models</b><span>Blockbench and Blender, built for the game</span></div>
+          <div><b>Textures</b><span>Art that holds up at 16x and 64x</span></div>
+          <div><b>Animation</b><span>Rigging and motion for mobs, items, effects</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="commissions" class="band">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Private work</p>
+        <h2>Commissions</h2>
+        <p class="lede">Need a mod, a feature or an asset that only you will have? The team that builds our public mods builds yours, and what you pay for belongs to you.</p>
+      </div>
+      <div class="offer">
+        <div class="reveal"><h3>Custom mods</h3><p>Content, mechanics and server-side systems for Fabric or NeoForge, in Java or Kotlin.</p></div>
+        <div class="reveal"><h3>3D models</h3><p>Blocks, items and mobs modelled in Blockbench or Blender, ready for the game.</p></div>
+        <div class="reveal"><h3>Textures &amp; animation</h3><p>Texture work at the resolution you need, plus rigging and animation.</p></div>
+        <div class="reveal"><h3>Tooling &amp; web</h3><p>Tools, sites and databases around your server, in whatever fits the job.</p></div>
+      </div>
+      <ol class="steps reveal">
+        <li><b>Open an order ticket</b><span>On our Discord, choose <em>Order a Product</em>. It's private between you and the staff.</span></li>
+        <li><b>Describe what you need</b><span>Version, loader, what it should do. We come back with a quote.</span></li>
+        <li><b>Agree the terms</b><span>Everything is written in the ticket, where the staff can see it.</span></li>
+        <li><b>Get your code</b><span>Delivered and yours. Publish it or keep it private, your call.</span></li>
+      </ol>
+      <p class="note">Paid work is arranged only through an order ticket. Deals struck in DMs are between you and the other person, and we can't mediate them when they go wrong.</p>
+      <div class="row-cta"><a class="btn btn-primary" href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Ask for a quote on Discord</a></div>
+    </div>
+  </section>
+
+  <section id="ideas">
+    <div class="wrap ideas">
+      <div class="prose reveal">
+        <p class="eyebrow">Suggestions</p>
+        <h2>Your ideas actually ship.</h2>
+        <p>Most of what we've shipped began as somebody's message in our suggestions channel. Write yours down, even if it sounds small. An idea with the why filled in gets built far more often than a one-liner.</p>
+        <p><strong>If your idea ships, your name goes in the credits of the mod and in the release notes.</strong> If it turns into something big, we go further, and we tell you before the release, not after.</p>
+        <ul class="rules">
+          <li>One idea per message. Five ideas in one post get answered as zero.</li>
+          <li>Scroll first. If it's already there, react to it instead of posting it again.</li>
+          <li>What gets built stays free and open source, like everything else we make.</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <div class="template">
+          <div class="template-bar"><span>#suggestions</span><button class="copy-btn" type="button" data-copy="template-text">Copy</button></div>
+<pre id="template-text"><b>**Idea:**</b> one line, the whole thing
+<b>**What it does:**</b> blocks, items, mobs, mechanics
+<b>**Why it's worth building:**</b> what's missing without it
+<b>**Version / loader:**</b> if it only makes sense on one
+<b>**References:**</b> links, screenshots, mods that come close</pre>
+        </div>
+        <ul class="status" aria-label="What the staff reactions mean">
+          <li><span>👀</span><span><b>Read</b></span></li>
+          <li><span>🧠</span><span><b>Under discussion</b></span></li>
+          <li><span>✅</span><span><b>We're building it</b></span></li>
+          <li><span>🚀</span><span><b>Shipped</b></span></li>
+          <li><span>❌</span><span><b>Not for us</b><small>Always with a reason. No today isn't no forever.</small></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" class="band">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Volunteer team</p>
+        <h2>Join the team</h2>
+        <p class="lede">We're always short of hands. Pick what you'd do and fill in the form on Discord. It takes two minutes and opens a private channel with the reviewers.</p>
+      </div>
+      <div class="roles">
+        <div class="reveal"><h3>Apprentice</h3><p>New to this? Learn by building, next to people who have already shipped mods.</p></div>
+        <div class="reveal"><h3>Mod Developer</h3><p>Java or Kotlin, Fabric or NeoForge. Bring code we can read.</p></div>
+        <div class="reveal"><h3>3D Modeler</h3><p>Blockbench, Blender. Models that end up in game.</p></div>
+        <div class="reveal"><h3>Texture Artist</h3><p>Textures and item art that hold up at 16x and at 64x.</p></div>
+        <div class="reveal"><h3>Animator</h3><p>Rigging and animation for mobs, items and effects.</p></div>
+        <div class="reveal"><h3>Moderator</h3><p>Keeping the server readable. Patience required, tools provided.</p></div>
+      </div>
+      <div class="langs-head reveal">
+        <h3>What we write in</h3>
+        <p>Java and Kotlin where Minecraft lives, systems languages for the tooling, and the web stack for everything with a web face. Coloured the way GitHub colours them.</p>
+      </div>
+      <ul class="langs reveal">
+        <li style="--c:#b07219">Java</li>
+        <li style="--c:#A97BFF">Kotlin</li>
+        <li style="--c:#3572A5">Python</li>
+        <li style="--c:#00ADD8">Go</li>
+        <li style="--c:#dea584">Rust</li>
+        <li style="--c:#555555">C</li>
+        <li style="--c:#f34b7d">C++</li>
+        <li style="--c:#178600">C#</li>
+        <li style="--c:#3178c6">TypeScript</li>
+        <li style="--c:#f1e05a">JavaScript</li>
+        <li style="--c:#4F5D95">PHP</li>
+        <li style="--c:#e34c26">HTML</li>
+        <li style="--c:#663399">CSS</li>
+        <li style="--c:#e38c00">SQL</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="support">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Support</p>
+        <h2>Need something from us?</h2>
+        <p class="lede">Open a ticket on Discord. One channel per request, a transcript when it closes, and staff who claim a ticket so two people don't answer over each other.</p>
+      </div>
+      <div class="tickets">
+        <div class="reveal"><b>General Support</b><span>Questions, help, anything else.</span></div>
+        <div class="reveal"><b>Product Support</b><span>Trouble with something you bought or use.</span></div>
+        <div class="reveal"><b>Report a Bug</b><span>Something is broken or behaves wrong.</span></div>
+        <div class="reveal"><b>Report a User</b><span>Handled privately.</span></div>
+        <div class="reveal"><b>Order a Product</b><span>Ask for a quote or place an order.</span></div>
+      </div>
+      <p class="bugline">A bug report we can fix has: <b>Minecraft version</b> · <b>loader + version</b> · <b>mod version</b> · <b>steps to trigger it</b> · <b>log on mclo.gs or a gist</b></p>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2 class="reveal">Write the one you'd want to play.</h2>
+      <p class="lede">Ideas, bug reports, applications and orders all start in the same place.</p>
+      <a class="btn btn-primary" href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Join Studio Deriva on Discord</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Studio Deriva · Free and open source · MIT</span>
+    <nav>
+      <a href="mods.html">Mods</a>
+      <a href="https://github.com/francomk" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script src="assets/field.js"></script>
+</body>
+</html>
