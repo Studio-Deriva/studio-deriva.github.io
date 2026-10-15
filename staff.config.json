@@ -1,13 +1,13 @@
 {
   "guildId": "1549024143238893669",
-  "roles": [
-    "Owner",
-    "Admin",
-    "Developer",
-    "3D Modeler",
-    "Texture Artist",
-    "Animator",
-    "Moderator"
+  "areas": [
+    { "name": "Owner", "roles": ["Owner"] },
+    { "name": "Development", "roles": ["Sr Developer (general)", "Sr Mod Developer", "Developer (general)", "Mod Developer", "Jr developer (general)", "Jr Mod developer"] },
+    { "name": "3D Modeling", "roles": ["Head 3d Modeler (blender)", "Head 3d Modeler (blockbench)", "3d Modeler (blender)", "3d Modeler (blockbench)"] },
+    { "name": "Textures", "roles": ["Head Texture Artist (HD)", "Head Texture Artist (pixel)", "Texture Artist (HD)", "Texture Artist (pixel)"] },
+    { "name": "Animation", "roles": ["Head Animator (blockbench)", "Head Animator (blender)", "Animator (blockbench)", "Animator (blender)"] },
+    { "name": "Moderation", "roles": ["Mod", "Jr Mod"] },
+    { "name": "Apprentices", "roles": ["Apprentice"] }
   ],
   "hide": []
 }

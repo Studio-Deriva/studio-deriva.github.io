@@ -5,8 +5,9 @@
 // DISCORD_BOT_TOKEN secret. The bot must be in the server and have the Server Members
 // intent turned on in the Discord developer portal, or the member list comes back empty.
 //
-// Which roles count as staff, and in which order they are shown, is set in
-// staff.config.json: role names or role IDs, highest first.
+// Which roles count as staff is set in staff.config.json, grouped into areas
+// (Development, Moderation...). Areas and the roles inside them are listed highest
+// first; a role can be given by name or by ID.
 //
 //   DISCORD_BOT_TOKEN=... node tools/sync-staff.mjs
 
@@ -22,7 +23,7 @@ if (!config.guildId) {
   process.exit(0);
 }
 if (!token) fail('DISCORD_BOT_TOKEN is not set. Add it under Settings > Secrets and variables > Actions.');
-if (!config.roles?.length) fail('No staff roles listed in staff.config.json.');
+if (!config.areas?.length) fail('No staff areas listed in staff.config.json.');
 
 async function api(path) {
   for (let attempt = 0; attempt < 5; attempt++) {
@@ -63,12 +64,13 @@ function avatarUrl(guildId, member) {
 const guildId = config.guildId;
 const allRoles = await api(`/guilds/${guildId}/roles`);
 
-// Staff roles in the configured order; each entry may be a role name or a role ID.
-const staffRoles = config.roles.map((key) => {
+function findRole(key) {
   const role = allRoles.find((r) => r.id === String(key)) ?? allRoles.find((r) => r.name.toLowerCase() === String(key).toLowerCase());
   if (!role) console.log(`::warning::sync-staff: no role called or numbered "${key}" in the server, skipped`);
   return role;
-}).filter(Boolean);
+}
+const areas = config.areas.map((area) => ({ name: area.name, roles: area.roles.map(findRole).filter(Boolean) }));
+const staffRoles = areas.flatMap((a) => a.roles);
 notice('roles in the server, highest first: ' + [...allRoles].sort((a, b) => b.position - a.position).filter((r) => r.name !== '@everyone').map((r) => r.name).join(', '));
 
 // The member list, a thousand at a time.
@@ -82,23 +84,36 @@ for (;;) {
 }
 
 const hidden = new Set((config.hide ?? []).map(String));
-const groups = staffRoles.map((role) => ({ role: { id: role.id, name: role.name, color: role.color }, members: [] }));
+// One group per area, coloured like the highest role in it that has a colour.
+const groups = areas.map((area) => ({
+  role: {
+    id: area.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    name: area.name,
+    color: (area.roles.find((r) => r.color) ?? { color: 0 }).color,
+  },
+  members: [],
+}));
 
 for (const member of members) {
   if (member.user.bot || hidden.has(member.user.id)) continue;
   const mine = staffRoles.filter((r) => member.roles.includes(r.id));
   if (!mine.length) continue;
-  // Everyone appears once, under their highest staff role; the pills list all of them.
-  const group = groups.find((g) => g.role.id === mine[0].id);
-  group.members.push({
+  // Everyone appears once, in the area of their highest staff role; the pills list every staff role they hold.
+  const index = areas.findIndex((a) => a.roles.some((r) => r.id === mine[0].id));
+  groups[index].members.push({
     id: member.user.id,
     name: member.nick || member.user.global_name || member.user.username,
     username: member.user.username,
     avatar: avatarUrl(guildId, member),
     roles: mine.map((r) => ({ name: r.name, color: r.color })),
+    rank: staffRoles.indexOf(mine[0]),
   });
 }
-for (const g of groups) g.members.sort((a, b) => a.name.localeCompare(b.name));
+// Within an area, the higher role first (Head before the rest), then by name.
+for (const g of groups) {
+  g.members.sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name));
+  for (const m of g.members) delete m.rank;
+}
 
 // Keep the old timestamp when nothing changed, so the file only changes when the staff do.
 let previous = null;
@@ -109,5 +124,5 @@ const data = { updated: same ? previous.updated : new Date().toISOString(), grou
 await mkdir(new URL('../data/', import.meta.url), { recursive: true });
 await writeFile(out, JSON.stringify(data, null, 2) + '\n');
 const count = groups.reduce((n, g) => n + g.members.length, 0);
-notice(`${count} staff in ${groups.filter((g) => g.members.length).length} roles${same ? ' (unchanged)' : ''}`);
+notice(`${count} staff in ${groups.filter((g) => g.members.length).length} areas${same ? ' (unchanged)' : ''}`);
 if (members.length <= 1) console.log('::warning::sync-staff: only one member came back. Is the Server Members intent on for the bot?');
