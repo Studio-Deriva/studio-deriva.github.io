@@ -90,7 +90,7 @@
 
 /* Versions table */
 .versions-card { padding: .4rem 0; }
-.versions-scroll { overflow-x: auto; }
+.versions-scroll { overflow-x: auto; position: relative; }
 .versions { width: 100%; border-collapse: collapse; font-size: .95rem; min-width: 640px; }
 .versions th { text-align: left; font-size: .8rem; font-weight: 600; color: var(--mr-dim); padding: .7rem 1rem; }
 .versions td { padding: .9rem 1rem; border-top: 1px solid var(--mr-line); color: var(--mr-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
