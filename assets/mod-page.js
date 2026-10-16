@@ -2,6 +2,8 @@
    from data/mods/<slug>.json. When the project is live on Modrinth, that file can be
    regenerated from Modrinth's public API; the page itself does not change. */
 (function () {
+  var IT = window.SD_LANG === 'it';
+  var t = window.SD_t || function (s) { return s; };
   var main = document.querySelector('[data-mod]');
   if (!main) return;
   var slug = main.getAttribute('data-mod');
@@ -49,9 +51,17 @@
   // ---------------------------------------------------------------- data
   var DL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var FABRIC = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14 14 4l6 6-10 10zM9 9l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>';
-  function date(iso) { return new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+  function date(iso) { return new Date(iso + 'T12:00:00Z').toLocaleDateString(IT ? 'it-IT' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
   function ago(iso) {
     var days = Math.round((Date.now() - new Date(iso + 'T12:00:00Z').getTime()) / 86400000);
+    if (IT) {
+      if (days < 1) return 'oggi';
+      if (days < 2) return 'ieri';
+      if (days < 7) return days + ' giorni fa';
+      if (days < 14) return 'settimana scorsa';
+      if (days < 31) return Math.round(days / 7) + ' sett. fa';
+      return date(iso);
+    }
     if (days < 1) return 'today';
     if (days < 2) return 'yesterday';
     if (days < 7) return days + ' days ago';
@@ -66,14 +76,14 @@
     var link = data.modrinth;
     var dlLink = function (v) {
       return link
-        ? '<a class="entry-dl" style="color:var(--mr-green)" href="' + esc(link + '/version/' + v.number) + '" target="_blank" rel="noopener">' + DL + 'Download</a>'
-        : '<span class="entry-dl soon" title="Waiting for Modrinth approval">' + DL + 'Soon on Modrinth</span>';
+        ? '<a class="entry-dl" style="color:var(--mr-green)" href="' + esc(link + '/version/' + v.number) + '" target="_blank" rel="noopener">' + DL + t('Download') + '</a>'
+        : '<span class="entry-dl soon" title="' + t('Waiting for Modrinth approval') + '">' + DL + t('Soon on Modrinth') + '</span>';
     };
 
     document.querySelector('[data-changelog]').innerHTML = versions.map(function (v) {
       return '<li class="entry ' + esc(v.channel) + '">' +
-        '<div class="entry-head"><h2>' + esc(v.name) + '<span>on ' + date(v.published) + '</span></h2>' + dlLink(v) + '</div>' +
-        '<div class="entry-body">' + markdown(v.changelog || '') + '</div></li>';
+        '<div class="entry-head"><h2>' + esc(v.name) + '<span>' + (IT ? 'il ' : 'on ') + date(v.published) + '</span></h2>' + dlLink(v) + '</div>' +
+        '<div class="entry-body">' + markdown((IT && v.changelog_it) || v.changelog || '') + '</div></li>';
     }).join('');
 
     document.querySelector('[data-versions]').innerHTML = versions.map(function (v) {
@@ -93,7 +103,7 @@
       var a = document.createElement('a');
       a.className = 'mr-btn live'; a.href = link; a.target = '_blank'; a.rel = 'noopener';
       a.innerHTML = btn.innerHTML;
-      a.querySelector('[data-download-kicker]').textContent = 'Download on';
+      a.querySelector('[data-download-kicker]').textContent = t('Download on');
       btn.replaceWith(a);
     }
     var dates = versions.map(function (v) { return v.published; }).sort();
@@ -101,13 +111,13 @@
       document.querySelector('[data-first-published]').textContent = date(dates[0]);
       document.querySelector('[data-last-updated]').textContent = date(dates[dates.length - 1]);
     }
-    if (data.status) document.querySelector('[data-status]').textContent = data.status;
+    if (data.status) document.querySelector('[data-status]').textContent = t(data.status);
   }
 
   fetch('data/mods/' + slug + '.json', { cache: 'no-cache' })
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(render)
     .catch(function () {
-      document.querySelector('[data-changelog]').innerHTML = '<li class="entry"><p class="entry-body">The changelog could not be loaded. Try again in a moment.</p></li>';
+      document.querySelector('[data-changelog]').innerHTML = '<li class="entry"><p class="entry-body">' + t('The changelog could not be loaded. Try again in a moment.') + '</p></li>';
     });
 })();

@@ -6,10 +6,19 @@
   var emptyEl = document.getElementById('empty');
   var syncedEl = document.getElementById('synced');
 
+  var IT = window.SD_LANG === 'it';
+  var t = window.SD_t || function (s) { return s; };
   function hex(n) { return n ? '#' + ('000000' + n.toString(16)).slice(-6) : '#99AAB5'; }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function ago(iso) {
     var mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+    if (IT) {
+      if (mins < 2) return 'proprio ora';
+      if (mins < 60) return mins + ' minuti fa';
+      var hi = Math.round(mins / 60);
+      if (hi < 48) return hi === 1 ? "un'ora fa" : hi + ' ore fa';
+      return Math.round(hi / 24) + ' giorni fa';
+    }
     if (mins < 2) return 'just now';
     if (mins < 60) return mins + ' minutes ago';
     var h = Math.round(mins / 60);
@@ -18,18 +27,19 @@
   }
 
   var SHOWN = 2; // role pills visible before "See more"
+  function seeMore(n) { return IT ? 'Altri ' + n : 'See ' + n + ' more'; }
   function person(m, groupColor) {
     var roles = m.roles.map(function (r, i) {
       return '<li style="--c:' + hex(r.color) + '"' + (i >= SHOWN ? ' class="extra"' : '') + '>' + esc(r.name) + '</li>';
     }).join('');
     var extra = m.roles.length - SHOWN;
-    var more = extra > 0 ? '<button class="see-more" type="button" aria-expanded="false" data-more="' + extra + '">See ' + extra + ' more</button>' : '';
+    var more = extra > 0 ? '<button class="see-more" type="button" aria-expanded="false" data-more="' + extra + '">' + seeMore(extra) + '</button>' : '';
     return '<li class="person" style="--role:' + groupColor + '">' +
       '<div class="avatar"><img src="' + esc(m.avatar) + '" alt="" width="90" height="90" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.visibility=\'hidden\'"></div>' +
       '<h3>' + esc(m.name) + '</h3>' +
       '<p class="handle">@' + esc(m.username) + '</p>' +
-      '<ul class="roles" aria-label="Roles">' + roles + '</ul>' + more +
-      '<a class="more" href="https://discord.com/users/' + esc(m.id) + '" target="_blank" rel="noopener">Discord profile</a>' +
+      '<ul class="roles" aria-label="' + t('Roles') + '">' + roles + '</ul>' + more +
+      '<a class="more" href="https://discord.com/users/' + esc(m.id) + '" target="_blank" rel="noopener">' + t('Discord profile') + '</a>' +
       '</li>';
   }
 
@@ -39,12 +49,12 @@
     groupsEl.innerHTML = groups.map(function (g) {
       var color = hex(g.role.color);
       return '<div class="group" role="group" style="--role:' + color + '" aria-labelledby="role-' + esc(g.role.id) + '">' +
-        '<div class="group-head"><h2 id="role-' + esc(g.role.id) + '">' + esc(g.role.name) + '</h2><span>' + g.members.length + (g.members.length === 1 ? ' person' : ' people') + '</span></div>' +
+        '<div class="group-head"><h2 id="role-' + esc(g.role.id) + '">' + esc(g.role.name) + '</h2><span>' + g.members.length + (IT ? (g.members.length === 1 ? ' persona' : ' persone') : (g.members.length === 1 ? ' person' : ' people')) + '</span></div>' +
         '<ul class="people">' + g.members.map(function (m) { return person(m, color); }).join('') + '</ul>' +
         '</div>';
     }).join('');
     if (data.updated) {
-      syncedEl.querySelector('span').textContent = 'Synced from Discord ' + ago(data.updated);
+      syncedEl.querySelector('span').textContent = (IT ? 'Sincronizzato da Discord ' : 'Synced from Discord ') + ago(data.updated);
       syncedEl.hidden = false;
     }
   }
@@ -55,7 +65,7 @@
     var card = b.closest('.person');
     var open = card.classList.toggle('open');
     b.setAttribute('aria-expanded', open ? 'true' : 'false');
-    b.textContent = open ? 'See less' : 'See ' + b.dataset.more + ' more';
+    b.textContent = open ? t('See less') : seeMore(b.dataset.more);
   });
 
   fetch('data/staff.json', { cache: 'no-cache' })

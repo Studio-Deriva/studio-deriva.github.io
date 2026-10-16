@@ -33,6 +33,71 @@
     book: { name: 'Book', icon: 'book', color: 'f' },
     bread: { name: 'Bread', icon: 'bread', color: 'f' }
   };
+  // ------------------------------------------------------------------ Italian
+  // GUI lines follow the mod's own it_it.json. They avoid accents (finche', puo') because
+  // Minecraft's ascii font has no accented letters, exactly as the mod does.
+  var IT = window.SD_LANG === 'it';
+  var IT_NAMES = { diamond: 'Diamante', emerald: 'Smeraldo', gold: "Lingotto d'oro", iron: 'Lingotto di ferro', apple: 'Mela', pearl: 'Perla di Ender', candy: 'Caramella rara', expcandy: 'Caramella Esp. M', book: 'Libro', bread: 'Pane' };
+  if (IT) Object.keys(IT_NAMES).forEach(function (k) { ITEMS[k].name = IT_NAMES[k]; });
+  var GUI = {
+    '&fYou': '&fTu', '&fThem': '&fLui', '&aYou': '&aTu',
+    '&aConfirmed': '&aConfermato', '&7Has not confirmed yet': '&7Non ha ancora confermato',
+    '&7Click to take it back.': '&7Clicca per riprenderlo.',
+    '&fCancel': '&fAnnulla', '&7The trade goes through in a moment.': '&7Lo scambio avviene fra un istante.',
+    '&7Click to stop it while you still can.': "&7Clicca per fermarlo finche' puoi.",
+    '&fConfirm': '&fConferma', '&fConfirmed': '&fConfermato',
+    '&7When you both confirm, a three second': '&7Quando confermate tutti e due si apre',
+    '&7window opens before the trade happens.': '&7una finestra di tre secondi prima dello',
+    '&7Any change to an offer clears this.': "&7scambio. Ogni modifica all'offerta la azzera.",
+    '&cEmpty your offer': '&cSvuota la tua offerta', '&7Takes back everything you offered,': '&7Riprende tutto quello che hai offerto,',
+    '&7money included, and clears both': '&7soldi compresi, e azzera tutte e due', '&7confirmations.': '&7le conferme.',
+    '&dAdd a Pokemon': '&dAggiungi un Pokemon', '&7Opens your party and your PC boxes.': '&7Apre la tua squadra e i box del PC.',
+    '&6Add money': '&6Aggiungi soldi', '&7Money stays yours until the trade happens.': "&7I soldi restano tuoi finche' lo scambio non avviene.",
+    '&8Money': '&8Soldi', '&aTrade complete': '&aScambio completato', '&7You gave:': '&7Hai dato:', '&7You got:': '&7Hai ricevuto:',
+    'Trade again': 'Nuovo scambio',
+    '&ePrevious box': '&eBox precedente', '&eNext box': '&eBox successivo', '&cBack to the trade': '&cTorna allo scambio',
+    '&8Party: empty slot': '&8Squadra: posto vuoto', '&8Empty': '&8Vuoto', '&8Party': '&8Squadra',
+    '&7Already in your offer': "&7Gia' nella tua offerta", '&cCannot be traded': "&cNon si puo' scambiare",
+    '&7Click: offer the stack': '&7Clic: offri tutto lo stack', '&7Right click: offer one': '&7Clic destro: offrine uno',
+    '&7Shift click: offer half': "&7Shift+clic: offrine meta'",
+    '&7Click to confirm the amount.': "&7Clicca per confermare l'importo.",
+    '&7Whole numbers only. 0 removes the offer.': "&7Solo numeri interi. 0 toglie l'offerta.",
+    // status line under the screen (page font, accents allowed)
+    '&cYour offer is full: eight slots per side.': '&cLa tua offerta è piena: otto slot per lato.',
+    '&7Your offer is already empty.': '&7La tua offerta è già vuota.',
+    '&7Everything came back from escrow. Both confirmations were cleared.': "&7È tornato tutto dall'escrow. Entrambe le conferme sono state azzerate.",
+    '&7You took your confirmation back.': '&7Hai ritirato la tua conferma.',
+    '&cTrade stopped.&7 Nothing moved: offers are still in escrow.': '&cScambio fermato.&7 Non si è mosso niente: le offerte sono ancora in escrow.',
+    '&aTrade complete.&7 Saved to the history: &f/bt history&7.': '&aScambio completato.&7 Salvato nello storico: &f/bt history&7.',
+    '&7Trade reset: inventory, party, money and both offers are back to the start.': "&7Scambio ricominciato: inventario, squadra, soldi e offerte sono tornati all'inizio.",
+    '&cThat is not a whole number.': '&cNon è un numero intero.',
+    '&7Money offer removed.': '&7Offerta di soldi rimossa.'
+  };
+  var RULES = [
+    [/^&fYour offer: (.*)$/, '&fLa tua offerta: $1'], [/^&fYou: &e(.*)$/, '&fTu: &e$1'],
+    [/^&7Balance: &f(.*)$/, '&7Saldo: &f$1'], [/^&7Balance: (.*)$/, '&7Saldo: $1'],
+    [/^&aOffer (\d+)$/, '&aOffri $1'], [/^&fBox (\d+) of (\d+)$/, '&fBox $1 di $2'],
+    [/^&e(\d+) money$/, '&e$1 soldi'],
+    [/^&7(.+) ×(\d+) left your inventory and is held in &bescrow&7\.$/, "&7$1 ×$2 ha lasciato l'inventario ed è in &bescrow&7."],
+    [/^&7Taken back: (.+)\.$/, '&7Ripreso: $1.'],
+    [/^&aYou confirmed\.&7 Waiting for (.+)\.\.\.$/, '&aHai confermato.&7 In attesa di $1...'],
+    [/^&b(.+)&7: "You haven't offered anything yet\."$/, '&b$1&7: "Non hai ancora offerto niente."'],
+    [/^&b(.+)&a confirmed\.&7 Three seconds to change your mind\.$/, '&b$1&a ha confermato.&7 Tre secondi per cambiare idea.'],
+    [/^&b(.+)&7 opened a new trade\.$/, '&b$1&7 ha aperto un nuovo scambio.'],
+    [/^&c(.+) cannot be traded\.$/, '&c$1 non si può scambiare.'],
+    [/^&7(.+) was fingerprinted\. It stays in your party until the trade happens\.$/, "&7Di $1 è stata presa l'impronta. Resta nella tua squadra finché lo scambio non avviene."],
+    [/^&7(.+) was fingerprinted\. It stays in your PC until the trade happens\.$/, "&7Di $1 è stata presa l'impronta. Resta nel tuo PC finché lo scambio non avviene."],
+    [/^&cYou only have (\d+)\.$/, '&cHai solo $1.'],
+    [/^&7You offer &e(\d+)&7\. Only the difference moves, in one atomic transfer\.$/, '&7Offri &e$1&7. Si sposta solo la differenza, in un unico trasferimento atomico.'],
+    [/^&7Click an item in your inventory to offer it\. &b(.+)&7 has already made an offer\.$/, "&7Clicca un oggetto nel tuo inventario per offrirlo. &b$1&7 ha già fatto un'offerta."]
+  ];
+  function L(s) {
+    if (!IT || typeof s !== 'string') return s;
+    if (Object.prototype.hasOwnProperty.call(GUI, s)) return GUI[s];
+    for (var i = 0; i < RULES.length; i++) if (RULES[i][0].test(s)) return s.replace(RULES[i][0], RULES[i][1]);
+    return s;
+  }
+
   function mon(name, lv, ball, opts) { opts = opts || {}; return { name: name, lv: lv, ball: ball, shiny: !!opts.shiny, tradeable: opts.tradeable !== false, id: name + lv + Math.random().toString(36).slice(2, 6) }; }
 
   // ------------------------------------------------------------------ Minecraft's bitmap font
@@ -162,7 +227,7 @@
       b.appendChild(n);
     }
     if (opts.shiny) b.classList.add('shiny');
-    b.setAttribute('aria-label', strip(opts.tip ? opts.tip[0] : 'Empty slot'));
+    b.setAttribute('aria-label', strip(L(opts.tip ? opts.tip[0] : 'Empty slot')));
     if (opts.tip) b._tip = opts.tip;
     if (opts.onClick) {
       b.addEventListener('click', function (e) { opts.onClick(e.shiftKey ? 'shift' : 'left'); });
@@ -179,6 +244,7 @@
     return slot(parent, p[0], p[1], { tip: tipLines, onClick: onClick });
   }
   function text(parent, x, y, str, align) {
+    str = L(str);
     var c = textCanvas(str);
     var w = width(str);
     place(c, align === 'right' ? x - w : align === 'center' ? x - Math.floor(w / 2) : x, y);
@@ -189,6 +255,7 @@
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   var LOG_COLORS = { a: '#7EE787', b: '#6ABCAE', c: '#FF7B72', d: '#D2A8FF', e: '#DFB35D', f: '#E6F2EF', '6': '#DFB35D', '7': '#9DB8B3', '8': '#6E8580' };
   function say(msg) {
+    msg = L(msg);
     var out = '', color = null, parts = String(msg).split(/&([0-9a-fr])/);
     for (var k = 0; k < parts.length; k++) {
       if (k % 2) { color = LOG_COLORS[parts[k]] || null; continue; }
@@ -384,7 +451,7 @@
       button(gui, 4, S.mine.ready ? 'btn_confirm_done' : 'btn_confirm', 64,
         [S.mine.ready ? '&fConfirmed' : '&fConfirm', '&7When you both confirm, a three second', '&7window opens before the trade happens.', '&7Any change to an offer clears this.'], confirm);
     }
-    [3, 5].forEach(function (i) { var p = slotXY(i); var b = slot(gui, p[0], p[1], { onClick: function () { (S.stage === 'locked' ? cancelCountdown : confirm)(); } }); b.setAttribute('aria-label', S.stage === 'locked' ? 'Cancel' : 'Confirm'); b.tabIndex = -1; });
+    [3, 5].forEach(function (i) { var p = slotXY(i); var b = slot(gui, p[0], p[1], { onClick: function () { (S.stage === 'locked' ? cancelCountdown : confirm)(); } }); b.setAttribute('aria-label', strip(L(S.stage === 'locked' ? '&fCancel' : '&fConfirm'))); b.tabIndex = -1; });
 
     button(gui, 47, 'btn_trash', 32, ['&cEmpty your offer', '&7Takes back everything you offered,', '&7money included, and clears both', '&7confirmations.'], trash);
     var pb = slotXY(49);
@@ -422,8 +489,8 @@
     lines.forEach(function (l, i) { if (l) text(o, GUI_W / 2, top + i * 10, l, 'center'); });
     var by = top + lines.length * 10 + 8;
     var b = el('button', 'mc-again', 48, by, 80, 20); b.type = 'button';
-    b.appendChild(place(textCanvas('Trade again'), 40 - Math.floor(width('Trade again') / 2), 6));
-    b.setAttribute('aria-label', 'Trade again');
+    b.appendChild(place(textCanvas(L('Trade again')), 40 - Math.floor(width(L('Trade again')) / 2), 6));
+    b.setAttribute('aria-label', L('Trade again'));
     b.addEventListener('click', again);
     o.appendChild(b);
     gui.appendChild(o);
@@ -503,6 +570,7 @@
   // ------------------------------------------------------------------ tooltip
   // Drawn like vanilla: dark purple fill, a two-tone border, title line set 2px apart.
   function tooltipCanvas(lines) {
+    lines = lines.map(L);
     var w = 0; lines.forEach(function (l) { w = Math.max(w, width(l)); });
     var h = lines.length * 10 + (lines.length > 1 ? 2 : 0) - 2;
     var c = document.createElement('canvas'); c.width = w + 8; c.height = h + 8;

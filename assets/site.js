@@ -2,6 +2,7 @@
    fully readable page when a feature is missing or motion is reduced. */
 (function () {
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var t = window.SD_t || function (s) { return s; };
 
   // Every page opens at its top (or at its #anchor), never at the scroll
   // position left over from the previous page.
@@ -28,7 +29,7 @@
     if (cta) { nav.insertBefore(end, cta); end.appendChild(cta); } else nav.appendChild(end);
     var toggle = document.createElement('button');
     toggle.type = 'button'; toggle.className = 'menu-toggle';
-    toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-controls', 'mobile-menu'); toggle.setAttribute('aria-label', 'Menu');
+    toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-controls', 'mobile-menu'); toggle.setAttribute('aria-label', t('Menu'));
     toggle.innerHTML = '<span></span>';
     end.appendChild(toggle);
 
@@ -38,13 +39,13 @@
     list.className = '';
     Array.prototype.forEach.call(list.children, function (li, i) { li.style.setProperty('--i', i); });
     menu.appendChild(list);
-    if (cta) { var c = cta.cloneNode(true); c.textContent = 'Join the Discord'; menu.appendChild(c); }
+    if (cta) { var c = cta.cloneNode(true); c.textContent = t('Join the Discord'); menu.appendChild(c); }
     document.body.appendChild(menu);
 
     var wasSolid = false;
     function setOpen(open) {
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Menu');
+      toggle.setAttribute('aria-label', t(open ? 'Close menu' : 'Menu'));
       document.body.classList.toggle('menu-open', open);
       if (open) {
         wasSolid = header.classList.contains('solid');
@@ -134,12 +135,12 @@
       function selectIt() {
         var r = document.createRange(); r.selectNodeContents(src);
         var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-        btn.textContent = 'Selected';
+        btn.textContent = t('Selected');
       }
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(src.textContent).then(function () { btn.textContent = 'Copied'; }, selectIt);
+        navigator.clipboard.writeText(src.textContent).then(function () { btn.textContent = t('Copied'); }, selectIt);
       } else selectIt();
-      setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
+      setTimeout(function () { btn.textContent = t('Copy'); }, 2000);
     });
   });
 })();
