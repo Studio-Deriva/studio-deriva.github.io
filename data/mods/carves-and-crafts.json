@@ -1,0 +1,50 @@
+{
+  "slug": "carves-and-crafts",
+  "name": "Carves & Crafts",
+  "modrinth": null,
+  "status": "Pending approval on Modrinth",
+  "versions": [
+    {
+      "name": "Carves & Crafts 1.0.6",
+      "number": "1.0.6",
+      "channel": "release",
+      "minecraft": [
+        "1.21.11"
+      ],
+      "loaders": [
+        "Fabric"
+      ],
+      "published": "2026-10-10",
+      "downloads": 4,
+      "changelog": "## 1.0.6 — security fixes\n\n- **Malformed designs:** a broken design sent by a modified client, or read from a `.pumpkin` file or a data pack preset, is now rejected cleanly. Before, it could flood the server log with errors, and a bad file in the schematics folder crashed the game when opening the PC view.\n- **Item hovers:** pumpkin designs inside items are now sent as references in every packet, including the item hover of a death message. Killing someone while holding a renamed bundle or shulker box full of large designs could disconnect every player online.\n- **Schematic libraries:** each entry now also counts its name and authors towards the 4 MiB cap, so a library can't grow to hundreds of thousands of near-empty entries. Existing libraries are kept.\n- **Carving bench:** opening a bench you already have open no longer frees it for another player."
+    },
+    {
+      "name": "Carves & Crafts 1.0.5(beta)",
+      "number": "1.0.5(beta)",
+      "channel": "beta",
+      "minecraft": [
+        "1.21.11"
+      ],
+      "loaders": [
+        "Fabric"
+      ],
+      "published": "2026-10-10",
+      "downloads": 2,
+      "changelog": "## 1.0.5 — Beta | interface fixes\n\n- **Editor:** in narrow windows the knife and paint costs now get their own row above the buttons, instead of running under \"Save schematic\".\n- **Bench, Schematics tab:** the World / PC / Presets button is wider, so \"Presets\" fits instead of scrolling. The schematic list next to it is slightly narrower.\n- **Mod Menu:** the mod now has its real icon and a link to the source code, and bug reports go to a ticket on the Studio Deriva Discord."
+    },
+    {
+      "name": "Carves & Crafts 1.0.4(beta)",
+      "number": "1.0.4(beta)",
+      "channel": "beta",
+      "minecraft": [
+        "1.21.11"
+      ],
+      "loaders": [
+        "Fabric"
+      ],
+      "published": "2026-10-09",
+      "downloads": 8,
+      "changelog": "## 1.0.4 — Beta\n\n### Fixed\n\n- **No more \"inventory bans\".** Carved pumpkin items no longer carry their whole design over the network, only a tiny reference to it. An inventory, a chest or a shulker box full of detailed pumpkins can no longer disconnect players. Pumpkins displayed inside blocks (shelves, campfires...) are sent the same way.\n- The carving bench still gets the full design of the pumpkin it holds, so carving and editing work exactly as before.\n- Creative inventory: carved pumpkins keep their design when you move them around. A pumpkin whose design the server no longer knows (for example from a creative hotbar saved long ago) is refused instead of coming back blank.\n\n### Added\n\n- **Color limit for servers.** New option `maxColorsPerDesign` and admin command `/carves maxcolors [off|1-254]` (operator level 3). Off by default. It caps the colors of new designs, whether carved, imported or copied. Existing pumpkins and schematics are kept, and a pumpkin already over the limit can still be edited as long as no colors are added.\n- The editor shows a color counter when a limit is set, and won't let you confirm a design over it.\n- The option is also available in the Mod Menu config screen.\n\n### Changed\n\n- New textures for the Carving Knife, Paintbrush and Color Palette.\n- New seed textures, with a color for each variety: Field, Heirloom and Winter.\n- New mod icon.\n- Bug reports now go to our Discord: the \"Issues\" link opens it. Please open a ticket there.\n\nThis is a beta: the network changes have been tested on a dedicated server, but not yet in long play sessions. Back up your world before updating, and tell us on [Discord](https://discord.gg/pQPWr7vfHu) if anything looks off."
+    }
+  ]
+}

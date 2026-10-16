@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="assets/site.css?v=202610152148">
+<link rel="stylesheet" href="assets/site.css?v=202610160900">
 <style>
 /* Mods: each mod takes over the page in its own colours. A pinned stage grows the logo with scroll, then the details. */
 
@@ -56,6 +56,7 @@
 .trades .logo .a-teal { transform: translateX(calc((1 - var(--p)) * -260px)); }
 .trades .logo .a-amber { transform: translateX(calc((1 - var(--p)) * 260px)); }
 .trades .stage .tagline { color: var(--accent); }
+.alpha-tag { display: inline-block; vertical-align: middle; font: 600 .8rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: #0B1416; background: var(--hi); padding: .45rem .7rem; border-radius: 100px; margin-right: .4rem; }
 
 /* Details */
 .detail { padding-block: 0 clamp(5rem, 10vw, 8rem); }
@@ -191,8 +192,8 @@
       <h1>Mods</h1>
       <p class="lede">Two so far. Each one ships with its full source, its tests, and a written account of every bug we found before release and how we closed it.</p>
       <nav class="jump" aria-label="Jump to a mod">
-        <a href="#carves-and-crafts"><img class="px" src="assets/mods/carves-and-crafts.png" alt="" width="36" height="36">Carves &amp; Crafts</a>
-        <a href="#bettertrades"><img src="assets/mods/bettertrades.svg" alt="" width="36" height="36">BetterTrades</a>
+        <a href="carves-and-crafts.html"><img class="px" src="assets/mods/carves-and-crafts.png" alt="" width="36" height="36">Carves &amp; Crafts</a>
+        <a href="#bettertrades"><img src="assets/mods/bettertrades.svg" alt="" width="36" height="36">BetterTrades <small style="color:var(--mist);font-weight:500">alpha</small></a>
       </nav>
     </div>
   </div>
@@ -203,7 +204,7 @@
       <div class="stage">
         <img class="logo" src="assets/mods/carves-and-crafts.png" alt="Carves & Crafts logo, a pixel-art carved pumpkin face" width="360" height="360">
         <h2>Carves &amp; Crafts</h2>
-        <p class="tagline">Pumpkin carving, pixel by pixel.</p>
+        <p class="tagline">Pumpkin carving, pixel by pixel. <a href="carves-and-crafts.html" style="color:inherit">Changelog &amp; versions ›</a></p>
       </div>
     </div>
 
@@ -258,7 +259,8 @@
             <b data-count="10">10</b>
             <p>Findings in the audit behind 1.0.3: network abuse, oversized chunk data, player data loss, unbounded libraries, render cache. What each was, what changed, and the one that is only partly closed are all in <code>HOW_WE_VERIFIED_AND_FIXED_THE_BUGS.txt</code>.</p>
             <div class="actions">
-              <a class="btn btn-solid" href="https://github.com/francomk/Carves-Crafts-" target="_blank" rel="noopener">Source on GitHub</a>
+              <a class="btn btn-solid" href="carves-and-crafts.html">Changelog &amp; versions</a>
+              <a class="btn btn-line" href="https://github.com/francomk/Carves-Crafts-" target="_blank" rel="noopener">Source on GitHub</a>
               <a class="btn btn-line" href="https://github.com/francomk/Carves-Crafts-/blob/main/HOW_WE_VERIFIED_AND_FIXED_THE_BUGS.txt" target="_blank" rel="noopener">Read the audit</a>
             </div>
           </div>
@@ -278,13 +280,13 @@
           <path class="a-amber" d="M1142 880H470V769L285 939 470 1109V995H1142a45 45 0 0 0 45-45v-25a45 45 0 0 0-45-45Z" fill="#DFB35D"/>
         </svg>
         <h2>BetterTrades</h2>
-        <p class="tagline">Trading for Cobblemon, done safely.</p>
+        <p class="tagline">Trading for Cobblemon, done safely. Currently in alpha testing.</p>
       </div>
     </div>
 
     <div class="detail">
       <div class="wrap">
-        <p class="big-lede reveal">Server-side player trading for Cobblemon. <span>Pokémon, items and money in the same offer, a full history in a database, and no client mod required: vanilla clients see a normal container.</span></p>
+        <p class="big-lede reveal"><span class="alpha-tag">Alpha testing</span> Server-side player trading for Cobblemon. <span>Pokémon, items and money in the same offer, a full history in a database, and no client mod required: vanilla clients see a normal container.</span></p>
 
         <div class="trade-demo reveal" id="trade-demo">
           <div class="flow-head">
@@ -333,7 +335,7 @@
         <div class="facts">
           <div class="reveal">
             <dl class="spec">
-              <dt>Version</dt><dd>0.1.0</dd>
+              <dt>Version</dt><dd>0.1.0 · alpha testing</dd>
               <dt>Minecraft</dt><dd>1.21.1</dd>
               <dt>Loader</dt><dd>Fabric 0.16.5+</dd>
               <dt>Requires</dt><dd>Fabric API, Cobblemon 1.7.3–1.7.x</dd>
@@ -381,7 +383,7 @@
   </div>
 </footer>
 
-<script src="assets/site.js?v=202610152148"></script>
+<script src="assets/site.js?v=202610160900"></script>
 <script src="assets/trade-demo.js?v=202610152148"></script>
 <script>
 /* Carving bench demo: a 16x16 pumpkin face you can cut, paint and light. */
