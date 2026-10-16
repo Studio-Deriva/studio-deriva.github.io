@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/site.css?v=202610160900">
-<link rel="stylesheet" href="assets/mod-page.css?v=202610160930">
+<link rel="stylesheet" href="assets/mod-page.css?v=202610161000">
 </head>
 <body class="mod-page">
 
@@ -40,56 +40,31 @@
   <div class="wrap">
     <p class="crumbs"><a href="mods.html">Mods</a> <span aria-hidden="true">/</span> Carves &amp; Crafts</p>
 
-    <!-- Project header, laid out like a Modrinth project page -->
+    <!-- Project header -->
     <section class="mp-head card">
       <img class="mp-icon" src="assets/mods/carves-and-crafts.png" alt="" width="96" height="96">
       <div class="mp-title">
         <h1>Carves &amp; Crafts</h1>
-        <p class="mp-summary">Carve and paint pumpkins pixel by pixel, with real holes and lanterns that glow in the colour of their flame.</p>
-        <div class="mp-meta">
-          <span class="stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><b data-total-downloads>14</b> downloads</span>
-          <span class="tag">Decoration</span><span class="tag">Utility</span><span class="tag">Farming</span>
-        </div>
+        <p class="mp-summary">Pumpkin carving for Fabric 1.21.11. Free and open source.</p>
       </div>
-      <div class="mp-actions">
-        <span class="btn-mr pending" title="The project is waiting for Modrinth's review">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Download soon on Modrinth
+      <div class="mp-actions" data-download-slot>
+        <!-- Orange while the project waits for Modrinth's review; turns green with a link once it is live. -->
+        <span class="mr-btn soon" data-download>
+          <svg class="mr-logo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" aria-hidden="true"><path d="M57 32A25 25 0 1 1 47.6 12.4"/><path d="M45 32A13 13 0 1 1 40.4 22"/><path d="M27 37l12-12"/><circle cx="43" cy="21" r="5"/></svg>
+          <span><small data-download-kicker>Download soon on</small><b>Modrinth</b></span>
         </span>
-        <a class="btn-mr ghost" href="https://github.com/francomk/Carves-Crafts-" target="_blank" rel="noopener">Source</a>
       </div>
     </section>
 
     <nav class="mp-tabs card" aria-label="Project sections">
-      <a href="#description" data-tab="description">Description</a>
       <a href="#changelog" data-tab="changelog">Changelog</a>
       <a href="#versions" data-tab="versions">Versions</a>
     </nav>
 
     <div class="mp-body">
       <div class="mp-main">
-        <!-- Description -->
-        <section class="card prose-mr" data-panel="description">
-          <h2>Pumpkin carving, pixel by pixel</h2>
-          <p>Carves &amp; Crafts adds a carving bench where you cut and paint pumpkins pixel by pixel. Cuts go all the way through the wall, so you see the flesh and the hollow inside; paint takes any colour; a torch or a candle turns the finished pumpkin into a lantern that glows in the colour of its flame.</p>
-          <p><strong>Free and open source</strong>, like everything we make: MIT, source included, no premium version.</p>
-          <h3>Features</h3>
-          <ul>
-            <li><strong>Nine pumpkin models</strong>, each with its own shape and skin: Classic, White, Blue, Cinderella, Mini Yellow, Warty, Butternut, Kabocha and Turban.</li>
-            <li><strong>Real holes.</strong> A cut pixel goes through the wall and shows the flesh, the hole's sides and the cavity behind it.</li>
-            <li><strong>Paint in any colour.</strong> Full RGB with a hex field, HSV picker, dye swatches, fill, eyedropper, mirror, undo and redo. Three canvas densities: x1, x2 and x4.</li>
-            <li><strong>Lanterns.</strong> Torch, soul torch, copper torch, redstone torch or any candle: vanilla light level, glowing inside in its colour.</li>
-            <li><strong>Tools that wear out.</strong> The knife loses one durability per cut pixel, the brush one charge per painted pixel. A Color Palette refills the brush.</li>
-            <li><strong>Schematics.</strong> Save designs, copy them onto blank pumpkins, and share them as <code>.pumpkin</code> files. Data packs can ship presets.</li>
-            <li><strong>Farming and worldgen.</strong> Field Pumpkin, Heirloom Pumpkin and Winter Squash seeds, and wild patches in matching biomes.</li>
-          </ul>
-          <h3>Requirements</h3>
-          <p>Minecraft 1.21.11, Fabric Loader 0.19.5+, Fabric API and Java 21. Install it on <strong>both the client and the server</strong>. Optional: Mod Menu, JEI, Jade or WTHIT.</p>
-          <p><a href="mods.html#carves-and-crafts">Try the carving bench in your browser</a></p>
-        </section>
-
         <!-- Changelog: filled from data/mods/carves-and-crafts.json -->
-        <section class="card" data-panel="changelog" hidden>
+        <section class="card" data-panel="changelog">
           <ol class="timeline" data-changelog></ol>
         </section>
 
@@ -97,7 +72,7 @@
         <section class="card versions-card" data-panel="versions" hidden>
           <div class="versions-scroll">
             <table class="versions">
-              <thead><tr><th scope="col"><span class="sr">Channel</span></th><th scope="col">Name</th><th scope="col">Game version</th><th scope="col">Platform</th><th scope="col">Published</th><th scope="col">Downloads</th><th scope="col"><span class="sr">Download</span></th></tr></thead>
+              <thead><tr><th scope="col"><span class="sr">Channel</span></th><th scope="col">Name</th><th scope="col">Game version</th><th scope="col">Platform</th><th scope="col">Published</th><th scope="col">Downloads</th></tr></thead>
               <tbody data-versions></tbody>
             </table>
           </div>
@@ -113,18 +88,6 @@
           <div class="chips"><span class="chip fabric"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14 14 4l6 6-10 10zM9 9l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Fabric</span></div>
           <h3>Supported environments</h3>
           <div class="chips"><span class="chip">Client and server</span></div>
-        </section>
-        <section class="card side">
-          <h2>Links</h2>
-          <ul class="links">
-            <li><a href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Report issues</a></li>
-            <li><a href="https://github.com/francomk/Carves-Crafts-" target="_blank" rel="noopener">View source</a></li>
-            <li><a href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Join Discord server</a></li>
-          </ul>
-        </section>
-        <section class="card side">
-          <h2>Creators</h2>
-          <a class="creator" href="staff.html"><img src="assets/logo.svg" alt="" width="32" height="32"><span><b>Studio Deriva</b><small>Organization</small></span></a>
         </section>
         <section class="card side">
           <h2>Details</h2>
@@ -153,7 +116,7 @@
   </div>
 </footer>
 
-<script src="assets/site.js?v=202610160900"></script>
-<script src="assets/mod-page.js?v=202610160900"></script>
+<script src="assets/site.js?v=202610161000"></script>
+<script src="assets/mod-page.js?v=202610161000"></script>
 </body>
 </html>

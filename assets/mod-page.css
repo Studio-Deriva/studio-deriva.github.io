@@ -86,6 +86,30 @@
 .entry-head h2 span { font-weight: 400; font-size: 1rem; color: var(--mr-muted); margin-left: .3rem; }
 .entry-dl { display: inline-flex; align-items: center; gap: .35rem; font-weight: 700; font-size: .95rem; color: var(--mr-dim); }
 .entry-dl svg { width: 1.1em; height: 1.1em; }
+.entry-dl.soon { color: var(--mr-orange); }
+
+/* The Modrinth button: green and glowing on hover once live, orange while the project waits for review. */
+.mr-btn {
+  --c: var(--mr-green);
+  display: inline-flex; align-items: center; gap: .8rem;
+  padding: .8rem 1.4rem .8rem 1rem; border-radius: 16px;
+  background: color-mix(in srgb, var(--c) 14%, var(--mr-raised));
+  border: 2px solid color-mix(in srgb, var(--c) 70%, transparent);
+  color: var(--c); text-decoration: none;
+  transition: background .25s, box-shadow .25s, transform .25s var(--ease), color .25s;
+}
+.mr-btn .mr-logo { width: 2.4rem; height: 2.4rem; flex: none; }
+.mr-btn span { display: grid; line-height: 1.1; text-align: left; }
+.mr-btn small { font: 600 .78rem/1.2 "Inter", var(--f-body); opacity: .85; }
+.mr-btn b { font: 800 1.35rem/1.1 "Inter", var(--f-body); letter-spacing: -.01em; }
+.mr-btn.soon { --c: var(--mr-orange); cursor: default; }
+.mr-btn:hover, .mr-btn:focus-visible {
+  background: var(--c); color: #0A1A10; outline: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 25%, transparent), 0 0 36px color-mix(in srgb, var(--c) 60%, transparent);
+  transform: translateY(-2px);
+}
+.mr-btn.soon:hover { color: #2A1600; }
+@media (prefers-reduced-motion: reduce) { .mr-btn:hover { transform: none; } }
 .entry-body { margin-top: .6rem; }
 
 /* Versions table */

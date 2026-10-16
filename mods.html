@@ -56,7 +56,10 @@
 .trades .logo .a-teal { transform: translateX(calc((1 - var(--p)) * -260px)); }
 .trades .logo .a-amber { transform: translateX(calc((1 - var(--p)) * 260px)); }
 .trades .stage .tagline { color: var(--accent); }
-.alpha-tag { display: inline-block; vertical-align: middle; font: 600 .8rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: #0B1416; background: var(--hi); padding: .45rem .7rem; border-radius: 100px; margin-right: .4rem; }
+.alpha-badge { display: inline-flex; align-items: center; gap: .55rem; font: 700 .95rem/1 "IBM Plex Sans", sans-serif; color: #FF496E; background: rgba(255, 73, 110, .14); border: 1.5px solid rgba(255, 73, 110, .55); padding: .4rem .95rem .4rem .4rem; border-radius: 100px; box-shadow: 0 0 24px rgba(255, 73, 110, .25); vertical-align: middle; white-space: nowrap; }
+.alpha-badge i { font-style: normal; display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; border-radius: 50%; background: rgba(255, 73, 110, .25); font-weight: 800; }
+.alpha-badge.sm { font-size: .8rem; padding: .25rem .7rem .25rem .25rem; gap: .4rem; box-shadow: none; }
+.alpha-badge.sm i { width: 1.3rem; height: 1.3rem; }
 
 /* Details */
 .detail { padding-block: 0 clamp(5rem, 10vw, 8rem); }
@@ -193,7 +196,7 @@
       <p class="lede">Two so far. Each one ships with its full source, its tests, and a written account of every bug we found before release and how we closed it.</p>
       <nav class="jump" aria-label="Jump to a mod">
         <a href="carves-and-crafts.html"><img class="px" src="assets/mods/carves-and-crafts.png" alt="" width="36" height="36">Carves &amp; Crafts</a>
-        <a href="#bettertrades"><img src="assets/mods/bettertrades.svg" alt="" width="36" height="36">BetterTrades <small style="color:var(--mist);font-weight:500">alpha</small></a>
+        <a href="#bettertrades"><img src="assets/mods/bettertrades.svg" alt="" width="36" height="36">BetterTrades <span class="alpha-badge sm"><i>A</i>Alpha</span></a>
       </nav>
     </div>
   </div>
@@ -280,13 +283,15 @@
           <path class="a-amber" d="M1142 880H470V769L285 939 470 1109V995H1142a45 45 0 0 0 45-45v-25a45 45 0 0 0-45-45Z" fill="#DFB35D"/>
         </svg>
         <h2>BetterTrades</h2>
-        <p class="tagline">Trading for Cobblemon, done safely. Currently in alpha testing.</p>
+        <p class="tagline">Trading for Cobblemon, done safely.</p>
+        <span class="alpha-badge" style="opacity:calc(var(--p) * 2.2 - .5)"><i>A</i>Alpha testing</span>
       </div>
     </div>
 
     <div class="detail">
       <div class="wrap">
-        <p class="big-lede reveal"><span class="alpha-tag">Alpha testing</span> Server-side player trading for Cobblemon. <span>Pokémon, items and money in the same offer, a full history in a database, and no client mod required: vanilla clients see a normal container.</span></p>
+        <p class="reveal"><span class="alpha-badge"><i>A</i>Alpha testing</span></p>
+        <p class="big-lede reveal">Server-side player trading for Cobblemon. <span>Pokémon, items and money in the same offer, a full history in a database, and no client mod required: vanilla clients see a normal container.</span></p>
 
         <div class="trade-demo reveal" id="trade-demo">
           <div class="flow-head">
@@ -335,7 +340,7 @@
         <div class="facts">
           <div class="reveal">
             <dl class="spec">
-              <dt>Version</dt><dd>0.1.0 · alpha testing</dd>
+              <dt>Version</dt><dd>0.1.0 <span class="alpha-badge sm"><i>A</i>Alpha</span></dd>
               <dt>Minecraft</dt><dd>1.21.1</dd>
               <dt>Loader</dt><dd>Fabric 0.16.5+</dd>
               <dt>Requires</dt><dd>Fabric API, Cobblemon 1.7.3–1.7.x</dd>
@@ -383,7 +388,7 @@
   </div>
 </footer>
 
-<script src="assets/site.js?v=202610160900"></script>
+<script src="assets/site.js?v=202610161000"></script>
 <script src="assets/trade-demo.js?v=202610152148"></script>
 <script>
 /* Carving bench demo: a 16x16 pumpkin face you can cut, paint and light. */

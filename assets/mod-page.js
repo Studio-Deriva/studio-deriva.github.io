@@ -12,12 +12,12 @@
   function show(name) {
     var found = false;
     panels.forEach(function (p) { var on = p.getAttribute('data-panel') === name; p.hidden = !on; if (on) found = true; });
-    if (!found) return show('description');
+    if (!found) return show('changelog');
     tabs.forEach(function (t) {
       if (t.getAttribute('data-tab') === name) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
     });
   }
-  function fromHash() { show((location.hash || '#description').slice(1)); }
+  function fromHash() { show((location.hash || '#changelog').slice(1)); }
   window.addEventListener('hashchange', function () { fromHash(); window.scrollTo({ top: 0, behavior: 'instant' }); });
   fromHash();
 
@@ -67,7 +67,7 @@
     var dlLink = function (v) {
       return link
         ? '<a class="entry-dl" style="color:var(--mr-green)" href="' + esc(link + '/version/' + v.number) + '" target="_blank" rel="noopener">' + DL + 'Download</a>'
-        : '<span class="entry-dl" title="Waiting for Modrinth approval">' + DL + 'Soon on Modrinth</span>';
+        : '<span class="entry-dl soon" title="Waiting for Modrinth approval">' + DL + 'Soon on Modrinth</span>';
     };
 
     document.querySelector('[data-changelog]').innerHTML = versions.map(function (v) {
@@ -84,12 +84,18 @@
         '<td>' + v.loaders.map(function (l) { return '<span class="pill ' + esc(l.toLowerCase()) + '">' + (l === 'Fabric' ? FABRIC : '') + esc(l) + '</span>'; }).join(' ') + '</td>' +
         '<td title="' + date(v.published) + '">' + ago(v.published) + '</td>' +
         '<td>' + (v.downloads || 0).toLocaleString('en') + '</td>' +
-        '<td>' + (link ? '<a href="' + esc(link + '/version/' + v.number) + '" target="_blank" rel="noopener" aria-label="Download ' + esc(v.number) + '" style="color:var(--mr-green)">' + DL + '</a>' : '<span class="dl-off" title="Soon on Modrinth">' + DL + '</span>') + '</td>' +
         '</tr>';
     }).join('');
 
-    var total = versions.reduce(function (n, v) { return n + (v.downloads || 0); }, 0);
-    var t = document.querySelector('[data-total-downloads]'); if (t) t.textContent = total.toLocaleString('en');
+    // The big button: orange "Download soon" until the project is live, then a green link.
+    var btn = document.querySelector('[data-download]');
+    if (btn && link) {
+      var a = document.createElement('a');
+      a.className = 'mr-btn live'; a.href = link; a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML = btn.innerHTML;
+      a.querySelector('[data-download-kicker]').textContent = 'Download on';
+      btn.replaceWith(a);
+    }
     var dates = versions.map(function (v) { return v.published; }).sort();
     if (dates.length) {
       document.querySelector('[data-first-published]').textContent = date(dates[0]);
