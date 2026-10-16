@@ -17,6 +17,52 @@
 
   var header = document.querySelector('.site-header');
 
+  // Phone menu: the header's links are hidden below 860px, so a toggle opens them full screen.
+  (function () {
+    var nav = header && header.querySelector('.nav');
+    var links = nav && nav.querySelector('.nav-links');
+    if (!links) return;
+    var cta = nav.querySelector('.btn-primary');
+    var end = document.createElement('div');
+    end.className = 'nav-end';
+    if (cta) { nav.insertBefore(end, cta); end.appendChild(cta); } else nav.appendChild(end);
+    var toggle = document.createElement('button');
+    toggle.type = 'button'; toggle.className = 'menu-toggle';
+    toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-controls', 'mobile-menu'); toggle.setAttribute('aria-label', 'Menu');
+    toggle.innerHTML = '<span></span>';
+    end.appendChild(toggle);
+
+    var menu = document.createElement('div');
+    menu.className = 'mobile-menu'; menu.id = 'mobile-menu'; menu.hidden = true;
+    var list = links.cloneNode(true);
+    list.className = '';
+    Array.prototype.forEach.call(list.children, function (li, i) { li.style.setProperty('--i', i); });
+    menu.appendChild(list);
+    if (cta) { var c = cta.cloneNode(true); c.textContent = 'Join the Discord'; menu.appendChild(c); }
+    document.body.appendChild(menu);
+
+    var wasSolid = false;
+    function setOpen(open) {
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Menu');
+      document.body.classList.toggle('menu-open', open);
+      if (open) {
+        wasSolid = header.classList.contains('solid');
+        header.classList.add('solid');
+        menu.hidden = false;
+        requestAnimationFrame(function () { menu.classList.add('open'); });
+      } else {
+        menu.classList.remove('open');
+        if (!wasSolid && !header.classList.contains('always') && window.scrollY <= 40) header.classList.remove('solid');
+        setTimeout(function () { if (toggle.getAttribute('aria-expanded') === 'false') menu.hidden = true; }, 250);
+      }
+    }
+    toggle.addEventListener('click', function () { setOpen(toggle.getAttribute('aria-expanded') !== 'true'); });
+    menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { setOpen(false); toggle.focus(); } });
+    window.addEventListener('resize', function () { if (window.innerWidth > 860 && toggle.getAttribute('aria-expanded') === 'true') setOpen(false); });
+  })();
+
   // Split scroll-lit statements into words once.
   document.querySelectorAll('[data-words]').forEach(function (el) {
     var html = '';
