@@ -98,7 +98,10 @@
   color: var(--c); text-decoration: none;
   transition: background .25s, box-shadow .25s, transform .25s var(--ease), color .25s;
 }
-.mr-btn .mr-logo { width: 2.4rem; height: 2.4rem; flex: none; }
+.mr-btn .mr-logo {
+  width: 2.4rem; height: 2.4rem; flex: none; background: currentColor;
+  -webkit-mask: url("modrinth-mark.png") center / contain no-repeat; mask: url("modrinth-mark.png") center / contain no-repeat;
+}
 .mr-btn span { display: grid; line-height: 1.1; text-align: left; }
 .mr-btn small { font: 600 .78rem/1.2 "Inter", var(--f-body); opacity: .85; }
 .mr-btn b { font: 800 1.35rem/1.1 "Inter", var(--f-body); letter-spacing: -.01em; }
