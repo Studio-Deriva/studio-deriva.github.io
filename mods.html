@@ -60,6 +60,7 @@
 .alpha-badge i { font-style: normal; display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; border-radius: 50%; background: rgba(255, 73, 110, .25); font-weight: 800; }
 .alpha-badge.sm { font-size: .8rem; padding: .25rem .7rem .25rem .25rem; gap: .4rem; box-shadow: none; }
 .alpha-badge.sm i { width: 1.3rem; height: 1.3rem; }
+.alpha-badge.stage-corner { position: absolute; top: calc(56px + 1.4rem); right: max(16px, calc((100% - var(--max)) / 2 + 32px)); }
 
 /* Details */
 .detail { padding-block: 0 clamp(5rem, 10vw, 8rem); }
@@ -284,13 +285,12 @@
         </svg>
         <h2>BetterTrades</h2>
         <p class="tagline">Trading for Cobblemon, done safely.</p>
-        <span class="alpha-badge" style="opacity:calc(var(--p) * 2.2 - .5)"><i>A</i>Alpha testing</span>
+        <span class="alpha-badge stage-corner"><i>A</i>Alpha testing</span>
       </div>
     </div>
 
     <div class="detail">
       <div class="wrap">
-        <p class="reveal"><span class="alpha-badge"><i>A</i>Alpha testing</span></p>
         <p class="big-lede reveal">Server-side player trading for Cobblemon. <span>Pokémon, items and money in the same offer, a full history in a database, and no client mod required: vanilla clients see a normal container.</span></p>
 
         <div class="trade-demo reveal" id="trade-demo">
