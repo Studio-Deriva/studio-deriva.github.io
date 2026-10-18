@@ -125,6 +125,7 @@
     "Write the one you'd want to play.": "Scrivi quella che vorresti giocare.",
     "Ideas, bug reports, applications and orders all start in the same place.": "Idee, segnalazioni, candidature e ordini partono tutti dallo stesso posto.",
     "Join Studio Deriva on Discord": "Entra nel Discord di Studio Deriva",
+    "Or write to": "Oppure scrivi a",
     "Character field. Move the cursor to light it, click to colour it.": "Campo di caratteri. Muovi il cursore per illuminarlo, clicca per colorarlo.",
     "Studio Deriva logo, a blue octahedron": "Logo di Studio Deriva, un ottaedro blu",
     "Carves & Crafts logo, a pixel-art carved pumpkin face": "Logo di Carves & Crafts, una zucca intagliata in pixel art",
