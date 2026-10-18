@@ -8,5 +8,5 @@ Plain HTML, CSS and JavaScript, no build step. Open `index.html` in a browser to
 
 - `index.html` — home page
 - `mods.html` — our mods
-- `assets/field.js` — the interactive character field behind the hero (WebGL)
+- `assets/field.js` — the interactive character field behind the hero (WebGL, with a 2D canvas fallback)
 - `assets/site.js`, `assets/site.css` — shared scroll effects and styles
