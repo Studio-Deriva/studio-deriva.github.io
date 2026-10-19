@@ -1,9 +1,12 @@
 /* English / Italian switch.
-   The pages are written in English. When Italian is chosen, every text node (and alt, aria-label,
-   title, placeholder) whose English text is a key below is swapped for its translation, before the
-   other scripts run. The choice is kept in localStorage and in the ?lang= parameter; without one,
-   the browser's language decides. Scripts that write their own text read window.SD_LANG and use
-   window.SD_t(english) for the strings listed here.
+   The pages are written in English. tools/build-it.mjs uses the list below to write an Italian copy
+   of each page in it/, so search engines find both; those copies are marked <html lang="it">.
+   An English page that has an Italian copy (a <link rel="alternate" hreflang="it">) sends Italian
+   readers there. Any other page, like 404.html, is translated here in the browser: every text node
+   (and alt, aria-label, title, placeholder) whose English text is a key below is swapped for its
+   translation, before the other scripts run. The choice is kept in localStorage and in the ?lang=
+   parameter; without one, the browser's language decides. Scripts that write their own text read
+   window.SD_LANG and use window.SD_t(english) for the strings listed here.
    To translate a new text: add "English text exactly as on the page": "Testo italiano" below. */
 (function () {
   var IT = {
@@ -285,10 +288,29 @@
 
     // ---- page titles
     "Studio Deriva Mods": "Studio Deriva · Mod",
-    "Page not found · Studio Deriva": "Pagina non trovata · Studio Deriva"
+    "Page not found · Studio Deriva": "Pagina non trovata · Studio Deriva",
+    "Studio Deriva Staff": "Staff di Studio Deriva",
+
+    // ---- descriptions for search engines and link previews (the <head> of each page)
+    "Studio Deriva": "Studio Deriva",
+    "Carves & Crafts": "Carves & Crafts",
+    "Studio Deriva makes Minecraft mods. All of them free, all of them open source, source included. Private commissions on request.": "Studio Deriva crea mod per Minecraft. Tutte gratis, tutte open source, sorgente compreso. Commissioni private su richiesta.",
+    "Carves & Crafts and BetterTrades: free, open-source Minecraft mods by Studio Deriva, with their specs and published audits.": "Carves & Crafts e BetterTrades: mod per Minecraft gratuite e open source di Studio Deriva, con specifiche e audit pubblicati.",
+    "The staff of Studio Deriva: developers, artists and moderators, with their roles and Discord profiles.": "Lo staff di Studio Deriva: sviluppatori, artisti e moderatori, con i loro ruoli e i profili Discord.",
+    "Carves & Crafts: pumpkin carving for Fabric 1.21.11. Changelog, versions and details. Free and open source by Studio Deriva.": "Carves & Crafts: intaglio di zucche per Fabric 1.21.11. Changelog, versioni e dettagli. Gratis e open source, di Studio Deriva."
   };
 
   var KEY = 'sd-lang';
+  // An Italian copy written by tools/build-it.mjs: already translated, and always Italian.
+  var copy = document.documentElement.lang === 'it';
+  var hasCopy = !copy && !!document.querySelector('link[rel="alternate"][hreflang="it"]');
+  // The same page in the other language: it/<page> from the English one, ../<page> back.
+  function twin() {
+    var page = location.pathname.split('/').pop();
+    var url = new URL((copy ? '../' : 'it/') + page, location.href);
+    url.search = ''; url.hash = location.hash;
+    return url.toString();
+  }
   var lang = null;
   try {
     var q = new URLSearchParams(location.search).get('lang');
@@ -296,13 +318,15 @@
     else lang = localStorage.getItem(KEY);
   } catch (e) { /* storage blocked: fall back to the browser's language */ }
   if (lang !== 'it' && lang !== 'en') lang = (navigator.language || '').toLowerCase().indexOf('it') === 0 ? 'it' : 'en';
+  if (copy) lang = 'it';
+  else if (lang === 'it' && hasCopy) { location.replace(twin()); return; }
 
   window.SD_LANG = lang;
   window.SD_t = function (en) { return lang === 'it' && Object.prototype.hasOwnProperty.call(IT, en) ? IT[en] : en; };
   document.documentElement.lang = lang;
 
   // ---- swap the page's own text
-  if (lang === 'it') {
+  if (lang === 'it' && !copy) {
     var SKIP = 'script,style,pre,code,svg,textarea,[data-no-i18n]';
     var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) { return n.parentElement && !n.parentElement.closest(SKIP) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; }
@@ -348,6 +372,7 @@
     b.addEventListener('click', function () {
       if (o[0] === lang) return;
       try { localStorage.setItem(KEY, o[0]); } catch (e) {}
+      if (copy || hasCopy) { location.href = twin(); return; }
       var url = new URL(location.href);
       url.searchParams.set('lang', o[0]);
       location.replace(url.toString());

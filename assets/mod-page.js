@@ -2,6 +2,8 @@
    from data/mods/<slug>.json. When the project is live on Modrinth, that file can be
    regenerated from Modrinth's public API; the page itself does not change. */
 (function () {
+  // The site's root, from this script's own address, so the page also works from it/.
+  var ROOT = new URL('..', document.currentScript.src).href;
   var IT = window.SD_LANG === 'it';
   var t = window.SD_t || function (s) { return s; };
   var main = document.querySelector('[data-mod]');
@@ -114,7 +116,7 @@
     if (data.status) document.querySelector('[data-status]').textContent = t(data.status);
   }
 
-  fetch('data/mods/' + slug + '.json', { cache: 'no-cache' })
+  fetch(ROOT + 'data/mods/' + slug + '.json', { cache: 'no-cache' })
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(render)
     .catch(function () {

@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://studio-deriva.github.io/</loc></url>
-  <url><loc>https://studio-deriva.github.io/mods.html</loc></url>
-  <url><loc>https://studio-deriva.github.io/carves-and-crafts.html</loc></url>
-  <url><loc>https://studio-deriva.github.io/staff.html</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://studio-deriva.github.io/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/"/>
+  </url>
+  <url>
+    <loc>https://studio-deriva.github.io/it/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/"/>
+  </url>
+  <url>
+    <loc>https://studio-deriva.github.io/mods.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/mods.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/mods.html"/>
+  </url>
+  <url>
+    <loc>https://studio-deriva.github.io/it/mods.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/mods.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/mods.html"/>
+  </url>
+  <url>
+    <loc>https://studio-deriva.github.io/carves-and-crafts.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/carves-and-crafts.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/carves-and-crafts.html"/>
+  </url>
+  <url>
+    <loc>https://studio-deriva.github.io/it/carves-and-crafts.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/carves-and-crafts.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/carves-and-crafts.html"/>
+  </url>
+  <url>
+    <loc>https://studio-deriva.github.io/staff.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/staff.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/staff.html"/>
+  </url>
+  <url>
+    <loc>https://studio-deriva.github.io/it/staff.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/staff.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/staff.html"/>
+  </url>
 </urlset>

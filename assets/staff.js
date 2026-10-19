@@ -2,6 +2,8 @@
    server (tools/sync-staff.mjs). The page never talks to Discord itself, so no token is
    ever shipped to the browser. */
 (function () {
+  // The site's root, from this script's own address, so the page also works from it/.
+  var ROOT = new URL('..', document.currentScript.src).href;
   var groupsEl = document.getElementById('groups');
   var emptyEl = document.getElementById('empty');
   var syncedEl = document.getElementById('synced');
@@ -68,7 +70,7 @@
     b.textContent = open ? t('See less') : seeMore(b.dataset.more);
   });
 
-  fetch('data/staff.json', { cache: 'no-cache' })
+  fetch(ROOT + 'data/staff.json', { cache: 'no-cache' })
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(render)
     .catch(function () { emptyEl.hidden = false; });

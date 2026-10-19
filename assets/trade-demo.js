@@ -7,7 +7,8 @@
   var root = document.getElementById('trade-demo');
   if (!root) return;
 
-  var TEX = 'assets/mods/bettertrades-gui/';
+  // From this script's own address, so the demo also works from it/.
+  var TEX = new URL('mods/bettertrades-gui/', document.currentScript.src).href;
   var MC = TEX + 'minecraft/', CB = TEX + 'cobblemon/';
   var GUI_W = 176, GUI_H = 234, PANEL_W = 79, GAP = 6;
   var MAX_OFFER = 8;
