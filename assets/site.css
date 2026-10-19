@@ -148,6 +148,8 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem; font-size: .86r
 .foot nav { display: flex; gap: 1.4rem; flex-wrap: wrap; }
 .foot a { text-decoration: none; }
 .foot a:hover { color: var(--frost); }
+.legal { flex-basis: 100%; order: 3; font-size: .78rem; line-height: 1.5; color: #6E7BB0; max-width: 90ch; }
+.legal a { text-decoration: underline; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
