@@ -40,4 +40,14 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/staff.html"/>
     <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/staff.html"/>
   </url>
+  <url>
+    <loc>https://studio-deriva.github.io/modscan.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/modscan.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/modscan.html"/>
+  </url>
+  <url>
+    <loc>https://studio-deriva.github.io/it/modscan.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/modscan.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/modscan.html"/>
+  </url>
 </urlset>

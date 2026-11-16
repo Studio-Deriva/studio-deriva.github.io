@@ -12,6 +12,7 @@ Plain HTML, CSS and JavaScript, no build step. Open `index.html` in a browser to
 - `mods.html` — our mods, with the BetterTrades trade screen playable in the browser
 - `carves-and-crafts.html` — Carves & Crafts: description, changelog and versions
 - `staff.html` — the staff, read from the Discord server
+- `modscan.html` — the modscan desktop app: intro, features and downloads, with its own tab in the header. The files are assets of the GitHub release `modscan-v<version>` of this repository, not files in the repo: for a new version, publish a new release and update the links, sizes and SHA-256 on the page
 - `404.html` — page not found
 - `it/` — the Italian copies of the pages above. Generated, don't edit them: see below
 
