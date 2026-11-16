@@ -174,6 +174,7 @@
         <a href="#g-run">Avvio di programmi e codice</a>
         <a href="#g-chains">Catene</a>
         <a href="#g-deep">Analisi profonda (app desktop)</a>
+        <a href="#g-dive">DeepDive (app desktop 1.1.0 e successive)</a>
         <a href="#g-hidden">Contenuto nascosto</a>
         <a href="#g-pack">File nel pack</a>
         <a href="#g-index">Indice del modpack (.mrpack)</a>
@@ -399,6 +400,46 @@
           </div>
         </div>
       </section>
+      <section class="group" id="g-dive">
+        <div class="group-head"><h3>DeepDive (app desktop 1.1.0 e successive)</h3><p>Solo con l'interruttore DeepDive acceso: una scansione più lenta che decodifica il codice nascosto, confronta una mod con la sua versione ufficiale, scarica ciò che una mod scaricherebbe e segue i dati nel codice. Anche qui niente viene mai eseguito.</p></div>
+        <div class="tags">
+          <div class="tag strong" id="PAYLOADBAD">
+            <div class="tag-head"><code>PAYLOADBAD</code><b class="w">+60</b><span class="kind">Forte</span></div>
+            <h4>Scarica codice malevolo</h4>
+            <p>Il file che modscan ha scaricato dall'indirizzo usato dalla mod è a sua volta HIGH. Vale per quello che il server risponde adesso: può cambiare dopo.</p>
+          </div>
+          <div class="tag strong" id="UNPACKED">
+            <div class="tag-head"><code>UNPACKED</code><b class="w">+35</b><span class="kind">Forte</span></div>
+            <h4>Payload nascosto decodificato</h4>
+            <p>Dentro il file c'era codice cifrato o codificato (XOR, Base64, gzip, AES con la chiave nello stesso file) e modscan l'ha decodificato. Quello che contiene viene analizzato come il resto della mod.</p>
+          </div>
+          <div class="tag strong" id="MODTAMPER">
+            <div class="tag-head"><code>MODTAMPER</code><b class="w">+30</b><span class="kind">Forte</span></div>
+            <h4>Copia modificata di una mod nota</h4>
+            <p>Il file dice di essere una mod presente su Modrinth, ma rispetto alla versione ufficiale alcuni file sono stati aggiunti o modificati. Il report li elenca e dice cosa fanno scattare. Da solo è MEDIUM: controlla da dove hai preso il file.</p>
+          </div>
+          <div class="tag strong" id="TOKENFLOW">
+            <div class="tag-head"><code>TOKENFLOW</code><b class="w">+30</b><span class="kind">Forte</span></div>
+            <h4>I dati dell'account arrivano alla rete</h4>
+            <p>modscan ha seguito il token di sessione, o il contenuto di un file di credenziali, attraverso il codice fino a qualcosa che lo invia. L'accesso a Mojang o Microsoft non viene contato.</p>
+          </div>
+          <div class="tag strong" id="AUTOCMD">
+            <div class="tag-head"><code>AUTOCMD</code><b class="w">+30</b><span class="kind">Forte</span></div>
+            <h4>Invia comandi in chat da sola</h4>
+            <p>La mod può inviare comandi in chat da sola e contiene un comando di pagamento o da operatore, come "pay &lt;nome&gt; &lt;somma&gt;" o "op &lt;nome&gt;". Lo fanno anche gli aiuti per negozi ed economia quando clicchi: guarda il codice mostrato.</p>
+          </div>
+          <div class="tag strong" id="PACKCONFIG">
+            <div class="tag-head"><code>PACKCONFIG</code><b class="w">+20</b><span class="kind">Forte</span></div>
+            <h4>File di configurazione sospetto</h4>
+            <p>Un file di configurazione del pack contiene un webhook, un indirizzo sospetto o un comando: per esempio una mod per la chat già impostata per mandare tutto al Discord di qualcuno.</p>
+          </div>
+          <div class="tag signal" id="MIXINSENS">
+            <div class="tag-head"><code>MIXINSENS</code><b class="w">+10</b><span class="kind">Segnale</span></div>
+            <h4>Mixin nella classe della sessione</h4>
+            <p>La mod modifica la classe del gioco che contiene il token del tuo account. Lo fanno anche i cambia-account.</p>
+          </div>
+        </div>
+      </section>
       <section class="group" id="g-hidden">
         <div class="group-head"><h3>Contenuto nascosto</h3><p>Cose dentro il jar che non sono quello che sembrano.</p></div>
         <div class="tags">
@@ -586,7 +627,7 @@
   </div>
 </footer>
 
-<script src="../assets/i18n.js?v=202611161200"></script>
+<script src="../assets/i18n.js?v=202611162300"></script>
 <script src="../assets/site.js?v=202610161900"></script>
 <script>
 /* Tag finder: hides the tags (and empty groups) whose id, title and text do not contain every typed word. */

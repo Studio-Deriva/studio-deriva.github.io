@@ -561,7 +561,25 @@
     "What every tag means": "Cosa significa ogni tag",
     "modscan tags": "Tag di modscan",
     "score =": "punteggio =",
-    "(at most 30), up to 100": "(al massimo 30), fino a 100"
+    "(at most 30), up to 100": "(al massimo 30), fino a 100",
+
+    // ---- modscan-tags.html: DeepDive group
+    "DeepDive (desktop app 1.1.0 and later)": "DeepDive (app desktop 1.1.0 e successive)",
+    "Only with the DeepDive switch on: a slower scan that decodes hidden code, compares a mod with its official build, fetches what a mod would download, and follows data through the code. Still nothing is ever run.": "Solo con l'interruttore DeepDive acceso: una scansione più lenta che decodifica il codice nascosto, confronta una mod con la sua versione ufficiale, scarica ciò che una mod scaricherebbe e segue i dati nel codice. Anche qui niente viene mai eseguito.",
+    "Downloads malicious code": "Scarica codice malevolo",
+    "The file modscan fetched from the mod's download address is itself rated HIGH. True for what the server answers now: it can change later.": "Il file che modscan ha scaricato dall'indirizzo usato dalla mod è a sua volta HIGH. Vale per quello che il server risponde adesso: può cambiare dopo.",
+    "Hidden payload decoded": "Payload nascosto decodificato",
+    "Code was stored inside the file encrypted or encoded (XOR, Base64, gzip, AES with a key kept in the same file) and modscan decoded it. What it contains is analysed like the rest of the mod.": "Dentro il file c'era codice cifrato o codificato (XOR, Base64, gzip, AES con la chiave nello stesso file) e modscan l'ha decodificato. Quello che contiene viene analizzato come il resto della mod.",
+    "Modified copy of a known mod": "Copia modificata di una mod nota",
+    "The file says it is a mod that is on Modrinth, but a few files were added or changed compared with the official build. The report names them and what they trigger. Alone it is MEDIUM: check where you got the file.": "Il file dice di essere una mod presente su Modrinth, ma rispetto alla versione ufficiale alcuni file sono stati aggiunti o modificati. Il report li elenca e dice cosa fanno scattare. Da solo è MEDIUM: controlla da dove hai preso il file.",
+    "Account data reaches the network": "I dati dell'account arrivano alla rete",
+    "modscan followed the session token, or the content of a credential file, through the code until it was handed to something that sends it. Sign-in to Mojang or Microsoft is not counted.": "modscan ha seguito il token di sessione, o il contenuto di un file di credenziali, attraverso il codice fino a qualcosa che lo invia. L'accesso a Mojang o Microsoft non viene contato.",
+    "Sends commands in chat by itself": "Invia comandi in chat da sola",
+    "The mod can send chat commands on its own and contains a payment or operator command, such as \"pay <name> <amount>\" or \"op <name>\". Shop and economy helpers do this too when you click: check the code shown.": "La mod può inviare comandi in chat da sola e contiene un comando di pagamento o da operatore, come \"pay <nome> <somma>\" o \"op <nome>\". Lo fanno anche gli aiuti per negozi ed economia quando clicchi: guarda il codice mostrato.",
+    "Suspicious configuration file": "File di configurazione sospetto",
+    "A configuration file of the pack holds a webhook, a suspicious address or a command: for example a chat mod already set up to send everything to someone's Discord.": "Un file di configurazione del pack contiene un webhook, un indirizzo sospetto o un comando: per esempio una mod per la chat già impostata per mandare tutto al Discord di qualcuno.",
+    "Mixin into the session class": "Mixin nella classe della sessione",
+    "The mod changes the game class that holds your account token. Account switchers do it too.": "La mod modifica la classe del gioco che contiene il token del tuo account. Lo fanno anche i cambia-account."
   };
 
   var KEY = 'sd-lang';
