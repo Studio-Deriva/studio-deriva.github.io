@@ -32,6 +32,10 @@
 
 .intro { padding-block: calc(56px + clamp(4rem, 9vw, 7rem)) clamp(3rem, 6vw, 5rem); }
 .intro h1 { font-size: clamp(3.4rem, 10vw, 8rem); font-weight: 900; font-stretch: 120%; letter-spacing: -.035em; margin-block: 1rem 1.4rem; }
+.subtabs { display: inline-flex; gap: .3rem; padding: .35rem; border-radius: 100px; background: var(--deep); margin-bottom: 1.6rem; }
+.subtabs a { padding: .55rem 1.1rem; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: .95rem; color: var(--mist); }
+.subtabs a:hover { color: var(--frost); }
+.subtabs a[aria-current="page"] { background: var(--cobalt); color: #fff; }
 .jump { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2.4rem; }
 .jump a { display: inline-flex; align-items: center; gap: .7rem; padding: .5rem 1.1rem .5rem .5rem; border-radius: 100px; background: var(--deep); text-decoration: none; font-weight: 600; transition: background .2s; }
 .jump a:hover { background: var(--deep-2); }
@@ -138,6 +142,10 @@
 <main>
   <div class="intro">
     <div class="wrap">
+      <nav class="subtabs" aria-label="Sezioni di modscan">
+        <a href="modscan.html" aria-current="page">Panoramica</a>
+        <a href="modscan-tags.html">Tag</a>
+      </nav>
       <p class="eyebrow">App gratuita per computer · Windows e Mac</p>
       <h1>modscan</h1>
       <p class="lede">Un modpack preso da un link qualsiasi può nascondere un ladro di account. modscan guarda dentro ogni mod prima che tu avvii il gioco e ti dice, file per file, cosa sembra pericoloso.</p>
@@ -173,6 +181,7 @@
           <span class="lv" style="--c: var(--medium)">MEDIUM</span>
           <span class="lv" style="--c: var(--high)">HIGH</span>
           <span class="lv" style="--c: var(--undet)">Non giudicabile</span>
+          <a class="more" href="modscan-tags.html">Cosa significa ogni tag</a>
         </div>
 
         <div class="features">

@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>modscan tags</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Every tag modscan can give a file, what it means, how much it weighs and how to tell if a mod is dangerous.">
+<meta property="og:title" content="modscan tags">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://studio-deriva.github.io/modscan-tags.html">
+<meta property="og:description" content="Every tag modscan can give a file, what it means, how much it weighs and how to tell if a mod is dangerous.">
+<meta property="og:site_name" content="Studio Deriva">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="it_IT">
+<meta property="og:image" content="https://studio-deriva.github.io/assets/modscan.png">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#05081C">
+<link rel="icon" href="assets/modscan.png" type="image/png">
+<link rel="canonical" href="https://studio-deriva.github.io/modscan-tags.html">
+<link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/modscan-tags.html">
+<link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/modscan-tags.html">
+<link rel="alternate" hreflang="x-default" href="https://studio-deriva.github.io/modscan-tags.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site.css?v=202610190900">
+<style>
+/* modscan tags: every rule id the engine can report, with its weight and kind. Weights and the strong / signal
+   split are copied from the engine (Rules.java / rules.py); change them here when they change there. */
+.scan {
+  --bg: #0E1332; --bg-2: #151C45; --fg: #E3E7FA; --muted: #98A1CF; --line: #262F68;
+  --accent: #8394FF; --low: #7AD5A1; --medium: #F2B774; --high: #F29393; --undet: #C9A7F5;
+  color: var(--fg); background: linear-gradient(180deg, #151C45 0%, #0E1332 30%, #0A0F2A 100%);
+}
+.intro { padding-block: calc(56px + clamp(3rem, 7vw, 5rem)) clamp(2.5rem, 5vw, 4rem); }
+.intro h1 { font-size: clamp(3.4rem, 10vw, 8rem); font-weight: 900; font-stretch: 120%; letter-spacing: -.035em; margin-block: 1rem 1.4rem; }
+.subtabs { display: inline-flex; gap: .3rem; padding: .35rem; border-radius: 100px; background: var(--deep); margin-bottom: 1.6rem; }
+.subtabs a { padding: .55rem 1.1rem; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: .95rem; color: var(--mist); }
+.subtabs a:hover { color: var(--frost); }
+.subtabs a[aria-current="page"] { background: var(--cobalt); color: #fff; }
+
+.block { padding-block: clamp(3rem, 7vw, 5rem) 0; }
+.block .wrap { display: grid; gap: 2rem; }
+.block h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 900; font-stretch: 115%; }
+.block .lede { color: var(--muted); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 1rem; }
+.card { background: var(--bg-2); border: 1px solid var(--line); border-radius: 22px; padding: 1.4rem 1.4rem; display: grid; gap: .5rem; align-content: start; }
+.card h3 { font-size: 1.15rem; font-stretch: 108%; }
+.card p { color: var(--muted); font-size: .95rem; }
+.lv { justify-self: start; font: 600 .8rem/1 var(--f-mono); padding: .45rem .8rem; border-radius: 100px; background: color-mix(in srgb, var(--c) 16%, transparent); color: var(--c); border: 1px solid color-mix(in srgb, var(--c) 40%, transparent); }
+.formula { font: 500 clamp(1rem, 2vw, 1.25rem)/1.5 var(--f-mono); background: var(--bg-2); border: 1px solid var(--line); border-radius: 18px; padding: 1.1rem 1.3rem; overflow-wrap: anywhere; }
+.formula b { color: var(--accent); font-weight: 500; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: auto 1fr; gap: .2rem 1rem; background: var(--bg-2); border: 1px solid var(--line); border-left: 4px solid var(--c, var(--accent)); border-radius: 18px; padding: 1.1rem 1.3rem; }
+.steps li::before { content: counter(s); grid-row: span 2; font: 900 1.6rem/1 var(--f-display); color: var(--c, var(--accent)); }
+.steps b { font-weight: 700; }
+.steps span { color: var(--muted); font-size: .95rem; }
+
+.finder { position: sticky; top: 56px; z-index: 5; padding-block: .9rem; background: color-mix(in srgb, #0E1332 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.finder .wrap { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+.finder input { flex: 1 1 240px; min-width: 0; font: 500 1rem/1 var(--f-body); color: var(--fg); background: var(--bg-2); border: 1px solid var(--line); border-radius: 100px; padding: .8rem 1.1rem; }
+.finder input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.toc { display: flex; flex-wrap: wrap; gap: .4rem; }
+.toc a { font-size: .82rem; font-weight: 600; text-decoration: none; color: var(--muted); padding: .35rem .7rem; border-radius: 100px; border: 1px solid var(--line); }
+.toc a:hover { color: var(--fg); border-color: var(--accent); }
+@media (max-width: 760px) {
+  .finder { position: static; }
+  .toc { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding-inline: 16px; }
+  .toc a { white-space: nowrap; }
+  .group, .tag { scroll-margin-top: 72px; }
+}
+
+.groups { padding-block: 2rem clamp(4rem, 8vw, 6rem); }
+.groups .wrap { display: grid; gap: clamp(2.5rem, 6vw, 4rem); }
+.group { display: grid; gap: 1.1rem; scroll-margin-top: 140px; }
+.group-head { display: grid; gap: .4rem; }
+.group-head h3 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 900; font-stretch: 112%; }
+.group-head p { color: var(--muted); max-width: 70ch; }
+.tags { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: .8rem; }
+.tag { background: var(--bg-2); border: 1px solid var(--line); border-radius: 18px; padding: 1.1rem 1.2rem; display: grid; gap: .45rem; align-content: start; scroll-margin-top: 140px; }
+.tag:target { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent); }
+.tag-head { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.tag code { font: 600 .95rem/1 var(--f-mono); color: var(--fg); background: rgba(131, 148, 255, .14); padding: .35rem .55rem; border-radius: 8px; }
+.tag .w { font: 600 .9rem/1 var(--f-mono); color: var(--accent); }
+.tag.strong .w { color: var(--high); }
+.tag .kind { margin-left: auto; font: 600 .7rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; padding: .35rem .6rem; border-radius: 100px; color: var(--muted); border: 1px solid var(--line); }
+.tag.strong .kind { color: var(--high); border-color: color-mix(in srgb, var(--high) 40%, transparent); }
+.tag h4 { margin: 0; font: 700 1.02rem/1.3 var(--f-body); }
+.tag p { color: var(--muted); font-size: .92rem; }
+.none { color: var(--muted); }
+[hidden] { display: none !important; }
+
+.next { background: var(--ink); text-align: center; }
+.next .wrap { display: grid; gap: 1.4rem; justify-items: center; }
+.next h2 { font-weight: 900; font-stretch: 118%; }
+.actions { display: flex; flex-wrap: wrap; gap: .8rem; }
+</style>
+</head>
+<body>
+
+<header class="site-header always">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" width="17" height="25">Studio Deriva</a>
+    <ul class="nav-links">
+      <li><a href="mods.html">Mods</a></li>
+      <li><a href="staff.html">Staff</a></li>
+      <li><a href="modscan.html" aria-current="page">modscan</a></li>
+      <li><a href="index.html#open-source">Open source</a></li>
+      <li><a href="index.html#commissions">Commissions</a></li>
+      <li><a href="index.html#ideas">Ideas</a></li>
+      <li><a href="index.html#team">Join the team</a></li>
+    </ul>
+    <a class="btn btn-primary" href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Discord</a>
+  </div>
+</header>
+
+<main class="scan">
+  <div class="intro">
+    <div class="wrap">
+      <nav class="subtabs" aria-label="modscan sections">
+        <a href="modscan.html">Overview</a>
+        <a href="modscan-tags.html" aria-current="page">Tags</a>
+      </nav>
+      <p class="eyebrow">modscan · every finding explained</p>
+      <h1>Tags</h1>
+      <p class="lede">Every finding in a modscan report has a tag, like WEBHOOK or CHAINDROP, and a weight. Here is what each one means, how much it counts, and how to tell whether a mod is dangerous.</p>
+    </div>
+  </div>
+
+  <section class="block" id="score">
+    <div class="wrap">
+      <h2>How a score is made</h2>
+      <p class="formula">score = <b>strong tags</b> + <b>signals</b> (at most 30), up to 100</p>
+      <div class="cards">
+        <div class="card"><span class="lv" style="--c: var(--high)">Strong</span><h3>Strong tags count in full</h3><p>Indicators that normal mods almost never have: a webhook, a stealer chain, a disguised executable. One is often enough for HIGH.</p></div>
+        <div class="card"><span class="lv" style="--c: var(--accent)">Signal</span><h3>Signals add up to 30 at most</h3><p>Single behaviours that plenty of normal mods have: network, reflection, starting a program. However many there are, they never make a file HIGH on their own.</p></div>
+      </div>
+      <div class="cards">
+        <div class="card"><span class="lv" style="--c: var(--low)">LOW · 0–14</span><p>Nothing suspicious found. Not a guarantee: static analysis cannot see everything.</p></div>
+        <div class="card"><span class="lv" style="--c: var(--medium)">MEDIUM · 15–39</span><p>Something worth a look. Often signals that a normal mod has too; read the tags.</p></div>
+        <div class="card"><span class="lv" style="--c: var(--high)">HIGH · 40+</span><p>At least one strong indicator or a chain. Do not launch it until you know why.</p></div>
+        <div class="card"><span class="lv" style="--c: var(--undet)">Cannot be judged</span><p>The code the file runs is not in the file: downloaded or decrypted later, unreadable classes, or another archive format. No score can clear it.</p></div>
+      </div>
+      <p class="lede">Files verified by Modrinth are left out of the result. Only SIGNATURE, IOC and INDEXPATH are still checked on them.</p>
+    </div>
+  </section>
+
+  <section class="block" id="dangerous">
+    <div class="wrap">
+      <h2>Is this mod dangerous?</h2>
+      <ol class="steps">
+        <li style="--c: var(--high)"><b>HIGH with a "looks like" line</b><span>If the report says it looks like a stealer, a dropper, a loader or a hidden payload, or shows SIGNATURE or IOC: do not launch it, delete it, and tell us on Discord.</span></li>
+        <li style="--c: var(--medium)"><b>HIGH from CHAINDROP on a well-known mod</b><span>Updaters and installers really download and run programs. Download the mod again from its official page and scan that copy: if it is verified by Modrinth, it drops out of the result.</span></li>
+        <li style="--c: var(--medium)"><b>MEDIUM made only of signals</b><span>NET, REFLECT, EXEC, NATIVE, DYNLOAD and similar are everyday behaviour. Check where you got the file rather than the score.</span></li>
+        <li style="--c: var(--undet)"><b>Cannot be judged</b><span>modscan cannot see the code that will run. Launch it only if you trust whoever made it.</span></li>
+        <li style="--c: var(--low)"><b>LOW</b><span>Nothing suspicious was found. Getting mods from Modrinth or the author's page is still the best protection.</span></li>
+      </ol>
+      <div class="card">
+        <h3>Real mods that trigger strong tags</h3>
+        <p>Distant Horizons' updater and the ffmpeg installers of FancyMenu and Almanac get CHAINDROP, because they really download and run a program. Xaero's updater gets CHAINUPDATE. Essential's loader gets CHAINLOAD and is "cannot be judged". The official copies of these mods are verified by Modrinth, so they are left out of the result.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="finder" id="all">
+    <div class="wrap">
+      <input type="search" id="tag-filter" placeholder="Find a tag: WEBHOOK, token, download…" aria-label="Find a tag" autocomplete="off">
+      <nav class="toc" aria-label="Tag groups">
+        <a href="#g-threats">Known threats</a>
+        <a href="#g-steal">Stealing accounts and data</a>
+        <a href="#g-send">Sending data out</a>
+        <a href="#g-run">Running programs and code</a>
+        <a href="#g-chains">Chains</a>
+        <a href="#g-deep">Deep analysis (desktop app)</a>
+        <a href="#g-hidden">Hidden content</a>
+        <a href="#g-pack">Files in the pack</a>
+        <a href="#g-index">Modpack index (.mrpack)</a>
+        <a href="#g-scanner">The scan itself</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="groups">
+    <div class="wrap">
+      <section class="group" id="g-threats">
+        <div class="group-head"><h3>Known threats</h3><p>Matches with known malware. Checked even on files verified by Modrinth.</p></div>
+        <div class="tags">
+          <div class="tag strong" id="SIGNATURE">
+            <div class="tag-head"><code>SIGNATURE</code><b class="w">+100</b><span class="kind">Strong</span></div>
+            <h4>Known malware family</h4>
+            <p>The file matches a malware family in the modscan signature feed. Treat it as malicious.</p>
+          </div>
+          <div class="tag strong" id="IOC">
+            <div class="tag-head"><code>IOC</code><b class="w">+100</b><span class="kind">Strong</span></div>
+            <h4>On the IOC list</h4>
+            <p>The file's hash, its content or one of its strings is on the indicator list you loaded with "IOC list".</p>
+          </div>
+        </div>
+      </section>
+      <section class="group" id="g-steal">
+        <div class="group-head"><h3>Stealing accounts and data</h3><p>What stealers go after: the Minecraft session, Discord, browsers, wallets.</p></div>
+        <div class="tags">
+          <div class="tag signal" id="SESSTOKEN">
+            <div class="tag-head"><code>SESSTOKEN</code><b class="w">+30</b><span class="kind">Signal</span></div>
+            <h4>Reads the Minecraft session token</h4>
+            <p>The token is the key to your Minecraft account. Account switchers and skin tools read it too; together with the network in the same class it becomes CHAINSTEAL.</p>
+          </div>
+          <div class="tag strong" id="DCTOKEN">
+            <div class="tag-head"><code>DCTOKEN</code><b class="w">+40</b><span class="kind">Strong</span></div>
+            <h4>Discord token harvesting pattern</h4>
+            <p>Looks for the place where Discord keeps its login token, the way token stealers do.</p>
+          </div>
+          <div class="tag strong" id="BROWSER">
+            <div class="tag-head"><code>BROWSER</code><b class="w">+40</b><span class="kind">Strong</span></div>
+            <h4>Browser credential and cookie files</h4>
+            <p>Refers to the files where browsers save passwords and cookies.</p>
+          </div>
+          <div class="tag strong" id="LAUNCHER">
+            <div class="tag-head"><code>LAUNCHER</code><b class="w">+30</b><span class="kind">Strong</span></div>
+            <h4>Launcher account files</h4>
+            <p>Refers to the launcher's account and profile files, such as launcher_accounts.json.</p>
+          </div>
+          <div class="tag strong" id="WALLET">
+            <div class="tag-head"><code>WALLET</code><b class="w">+30</b><span class="kind">Strong</span></div>
+            <h4>Crypto wallet references</h4>
+            <p>Refers to crypto wallets: wallet.dat, MetaMask, Exodus, Electrum.</p>
+          </div>
+          <div class="tag strong" id="DPAPI">
+            <div class="tag-head"><code>DPAPI</code><b class="w">+25</b><span class="kind">Strong</span></div>
+            <h4>Windows DPAPI decryption</h4>
+            <p>Calls the Windows function that unlocks secrets saved by browsers and Discord.</p>
+          </div>
+          <div class="tag strong" id="KEYLOG">
+            <div class="tag-head"><code>KEYLOG</code><b class="w">+30</b><span class="kind">Strong</span></div>
+            <h4>Global keyboard hook library</h4>
+            <p>Contains a library able to record the keys you type in any program, not only in the game.</p>
+          </div>
+          <div class="tag signal" id="ROBOT">
+            <div class="tag-head"><code>ROBOT</code><b class="w">+20</b><span class="kind">Signal</span></div>
+            <h4>Screen capture and input control</h4>
+            <p>Uses java.awt.Robot: it can take screenshots and move the mouse or press keys.</p>
+          </div>
+          <div class="tag signal" id="CLIP">
+            <div class="tag-head"><code>CLIP</code><b class="w">+10</b><span class="kind">Signal</span></div>
+            <h4>Accesses the system clipboard</h4>
+            <p>Common for copy buttons. Stealers use it to read what you copied or to swap a wallet address.</p>
+          </div>
+          <div class="tag signal" id="IPLOOKUP">
+            <div class="tag-head"><code>IPLOOKUP</code><b class="w">+10</b><span class="kind">Signal</span></div>
+            <h4>Looks up your public IP address</h4>
+            <p>Asks an online service for the computer's public IP, something stealers add to what they send.</p>
+          </div>
+        </div>
+      </section>
+      <section class="group" id="g-send">
+        <div class="group-head"><h3>Sending data out</h3><p>Where stolen data could go.</p></div>
+        <div class="tags">
+          <div class="tag strong" id="WEBHOOK">
+            <div class="tag-head"><code>WEBHOOK</code><b class="w">+45</b><span class="kind">Strong</span></div>
+            <h4>Discord webhook URL</h4>
+            <p>Contains the address of a Discord webhook, the most common way for a stealer to send what it took to its author.</p>
+          </div>
+          <div class="tag strong" id="TELEGRAM">
+            <div class="tag-head"><code>TELEGRAM</code><b class="w">+30</b><span class="kind">Strong</span></div>
+            <h4>Telegram bot API</h4>
+            <p>Contains the address of the Telegram bot API, another common channel for stolen data.</p>
+          </div>
+          <div class="tag signal" id="BADHOST">
+            <div class="tag-head"><code>BADHOST</code><b class="w">+20</b><span class="kind">Signal</span></div>
+            <h4>Paste, tunnel, file-drop or logger host</h4>
+            <p>Points to a site often used to host payloads or collect data: paste sites, tunnels, file sharing, IP loggers.</p>
+          </div>
+          <div class="tag signal" id="IPURL">
+            <div class="tag-head"><code>IPURL</code><b class="w">+25</b><span class="kind">Signal</span></div>
+            <h4>Web address with a public IP</h4>
+            <p>A web address written as a public IP number instead of a domain name.</p>
+          </div>
+          <div class="tag signal" id="NET">
+            <div class="tag-head"><code>NET</code><b class="w">+5</b><span class="kind">Signal</span></div>
+            <h4>Uses network functions</h4>
+            <p>Most mods that check for updates or load skins do. Harmless alone.</p>
+          </div>
+        </div>
+      </section>
+      <section class="group" id="g-run">
+        <div class="group-head"><h3>Running programs and code</h3><p>Ways to run something outside the mod itself.</p></div>
+        <div class="tags">
+          <div class="tag signal" id="EXEC">
+            <div class="tag-head"><code>EXEC</code><b class="w">+25</b><span class="kind">Signal</span></div>
+            <h4>Can start programs</h4>
+            <p>Can start programs on your computer. Some normal mods do it, for example to open a folder or the browser.</p>
+          </div>
+          <div class="tag signal" id="SHELL">
+            <div class="tag-head"><code>SHELL</code><b class="w">+20</b><span class="kind">Signal</span></div>
+            <h4>Shell commands</h4>
+            <p>Contains system shell commands, or names of Windows tools that malware often abuses.</p>
+          </div>
+          <div class="tag signal" id="REFEXEC">
+            <div class="tag-head"><code>REFEXEC</code><b class="w">+20</b><span class="kind">Signal</span></div>
+            <h4>Starts programs through reflection</h4>
+            <p>Reaches the Java classes that start programs by name, which hides them from EXEC.</p>
+          </div>
+          <div class="tag strong" id="SCRIPTJAVA">
+            <div class="tag-head"><code>SCRIPTJAVA</code><b class="w">+25</b><span class="kind">Strong</span></div>
+            <h4>Script that runs programs</h4>
+            <p>A script in the pack (KubeJS and similar) reaches Java code that starts programs or loads classes.</p>
+          </div>
+          <div class="tag strong" id="PERSIST">
+            <div class="tag-head"><code>PERSIST</code><b class="w">+30</b><span class="kind">Strong</span></div>
+            <h4>Starts with the system</h4>
+            <p>Sets something to start with the computer: the Windows Run key or Startup folder, scheduled tasks, cron, macOS launch agents.</p>
+          </div>
+          <div class="tag signal" id="DYNLOAD">
+            <div class="tag-head"><code>DYNLOAD</code><b class="w">+20</b><span class="kind">Signal</span></div>
+            <h4>Loads classes at runtime</h4>
+            <p>Defines classes from bytes or web addresses while running. Common in libraries; dangerous when the bytes come from the network.</p>
+          </div>
+          <div class="tag signal" id="AGENT">
+            <div class="tag-head"><code>AGENT</code><b class="w">+15</b><span class="kind">Signal</span></div>
+            <h4>Java agent</h4>
+            <p>Declares a Java agent, which can rewrite other classes as they load.</p>
+          </div>
+          <div class="tag signal" id="WINAPI">
+            <div class="tag-head"><code>WINAPI</code><b class="w">+15</b><span class="kind">Signal</span></div>
+            <h4>Calls Windows functions directly</h4>
+            <p>Calls Windows functions through raw native pointers (LWJGL or JNA), outside Java's own APIs.</p>
+          </div>
+          <div class="tag signal" id="NATIVE">
+            <div class="tag-head"><code>NATIVE</code><b class="w">+8</b><span class="kind">Signal</span></div>
+            <h4>Loads native libraries</h4>
+            <p>Loads machine code, which the analysis cannot read. Common in rendering, audio and compression mods.</p>
+          </div>
+          <div class="tag signal" id="MAKEEXEC">
+            <div class="tag-head"><code>MAKEEXEC</code><b class="w">+4</b><span class="kind">Signal</span></div>
+            <h4>Marks files as executable</h4>
+            <p>Gives files permission to run as programs.</p>
+          </div>
+          <div class="tag signal" id="REFLECT">
+            <div class="tag-head"><code>REFLECT</code><b class="w">+5</b><span class="kind">Signal</span></div>
+            <h4>Reflection</h4>
+            <p>Calls methods by name (Class.forName + Method.invoke). Very common in normal mods.</p>
+          </div>
+        </div>
+      </section>
+      <section class="group" id="g-chains">
+        <div class="group-head"><h3>Chains</h3><p>Two behaviours together in the same class. A chain says much more than either one alone.</p></div>
+        <div class="tags">
+          <div class="tag strong" id="CHAINSTEAL">
+            <div class="tag-head"><code>CHAINSTEAL</code><b class="w">+50</b><span class="kind">Strong</span></div>
+            <h4>Credentials and network together</h4>
+            <p>The same class reads the session token or credential files and uses the network: the shape of an account stealer.</p>
+          </div>
+          <div class="tag strong" id="CHAINDROP">
+            <div class="tag-head"><code>CHAINDROP</code><b class="w">+40</b><span class="kind">Strong</span></div>
+            <h4>Download and run</h4>
+            <p>The same class downloads code and then loads or runs it. Some real updaters and installers do it too: see the examples below.</p>
+          </div>
+          <div class="tag signal" id="CHAINUPDATE">
+            <div class="tag-head"><code>CHAINUPDATE</code><b class="w">+15</b><span class="kind">Signal</span></div>
+            <h4>Self-updater shape</h4>
+            <p>Downloads a jar, checks its checksum and starts it with java -jar. Usually an updater, so it counts as a signal.</p>
+          </div>
+          <div class="tag signal" id="CHAINLOAD">
+            <div class="tag-head"><code>CHAINLOAD</code><b class="w">+15</b><span class="kind">Signal</span></div>
+            <h4>Loads code from the network</h4>
+            <p>Loads classes downloaded from the network. That code is not in the file, so the file is marked "cannot be judged".</p>
+          </div>
+        </div>
+      </section>
+      <section class="group" id="g-deep">
+        <div class="group-head"><h3>Deep analysis (desktop app)</h3><p>Found by the bytecode analysis of the desktop app, which follows calls between classes and rebuilds hidden strings.</p></div>
+        <div class="tags">
+          <div class="tag strong" id="DEOBF">
+            <div class="tag-head"><code>DEOBF</code><b class="w">+20</b><span class="kind">Strong</span></div>
+            <h4>Hidden indicator</h4>
+            <p>A webhook, a Telegram address or a shell command appears only in strings rebuilt at runtime: someone hid it on purpose.</p>
+          </div>
+          <div class="tag strong" id="TOKENEXFIL">
+            <div class="tag-head"><code>TOKENEXFIL</code><b class="w">+40</b><span class="kind">Strong</span></div>
+            <h4>Credentials sent out</h4>
+            <p>Token or credential access and the network within two calls of each other, even across classes.</p>
+          </div>
+          <div class="tag strong" id="DROPCHAIN">
+            <div class="tag-head"><code>DROPCHAIN</code><b class="w">+30</b><span class="kind">Strong</span></div>
+            <h4>Download and run across classes</h4>
+            <p>A downloaded file is written and started within two calls of each other, even across classes.</p>
+          </div>
+          <div class="tag strong" id="EARLYRUN">
+            <div class="tag-head"><code>EARLYRUN</code><b class="w">+15</b><span class="kind">Strong</span></div>
+            <h4>Runs at startup</h4>
+            <p>Something the game runs as soon as it loads the mod (an entrypoint) reaches credential access or a download-and-run path.</p>
+          </div>
+          <div class="tag strong" id="REFTARGET">
+            <div class="tag-head"><code>REFTARGET</code><b class="w">+20</b><span class="kind">Strong</span></div>
+            <h4>Reflection to a sensitive target</h4>
+            <p>Reflection resolves to the session token, or to the program-starting classes through a rebuilt name.</p>
+          </div>
+        </div>
+      </section>
+      <section class="group" id="g-hidden">
+        <div class="group-head"><h3>Hidden content</h3><p>Things inside the jar that are not what they look like.</p></div>
+        <div class="tags">
+          <div class="tag strong" id="B64PAYLOAD">
+            <div class="tag-head"><code>B64PAYLOAD</code><b class="w">+35</b><span class="kind">Strong</span></div>
+            <h4>Payload hidden in Base64</h4>
+            <p>An executable, a class or an archive stored as Base64 text.</p>
+          </div>
+          <div class="tag strong" id="ENCODED">
+            <div class="tag-head"><code>ENCODED</code><b class="w">+15</b><span class="kind">Strong</span></div>
+            <h4>Indicator hidden in Base64</h4>
+            <p>A suspicious string, such as a webhook or an IP address, encoded in Base64.</p>
+          </div>
+          <div class="tag strong" id="HIDBIN">
+            <div class="tag-head"><code>HIDBIN</code><b class="w">+35</b><span class="kind">Strong</span></div>
+            <h4>Disguised executable</h4>
+            <p>Executable bytes inside the jar under another extension.</p>
+          </div>
+          <div class="tag strong" id="HIDCLASS">
+            <div class="tag-head"><code>HIDCLASS</code><b class="w">+25</b><span class="kind">Strong</span></div>
+            <h4>Disguised class</h4>
+            <p>Java class bytes inside a file that does not end in .class.</p>
+          </div>
+          <div class="tag strong" id="LIBTAMPER">
+            <div class="tag-head"><code>LIBTAMPER</code><b class="w">+45</b><span class="kind">Strong</span></div>
+            <h4>Tampered library</h4>
+            <p>A library bundled in the mod differs from its published build: files were added or changed.</p>
+          </div>
+          <div class="tag signal" id="BINEXT">
+            <div class="tag-head"><code>BINEXT</code><b class="w">+30</b><span class="kind">Signal</span></div>
+            <h4>Executable or script in the jar</h4>
+            <p>An .exe, .bat, .cmd, .ps1, .vbs, .scr, .msi or .com file inside the jar.</p>
+          </div>
+          <div class="tag signal" id="HIDZIP">
+            <div class="tag-head"><code>HIDZIP</code><b class="w">+20</b><span class="kind">Signal</span></div>
+            <h4>Hidden archive</h4>
+            <p>A zip or jar inside the jar under another extension.</p>
+          </div>
+          <div class="tag signal" id="NESTJAR">
+            <div class="tag-head"><code>NESTJAR</code><b class="w">+20</b><span class="kind">Signal</span></div>
+            <h4>Nested jar in an unusual place</h4>
+            <p>A jar inside the jar, outside the folders loaders use for bundled libraries.</p>
+          </div>
+          <div class="tag signal" id="NATEXT">
+            <div class="tag-head"><code>NATEXT</code><b class="w">+12</b><span class="kind">Signal</span></div>
+            <h4>Native library in the jar</h4>
+            <p>A .dll, .so, .dylib or .jnilib file inside the jar.</p>
+          </div>
+          <div class="tag signal" id="B64BLOB">
+            <div class="tag-head"><code>B64BLOB</code><b class="w">+10</b><span class="kind">Signal</span></div>
+            <h4>Long Base64 strings</h4>
+            <p>Base64-like strings of 300 characters or more. Often images or fonts, sometimes a hidden payload.</p>
+          </div>
+          <div class="tag signal" id="OBFUSC">
+            <div class="tag-head"><code>OBFUSC</code><b class="w">+10</b><span class="kind">Signal</span></div>
+            <h4>Obfuscated</h4>
+            <p>Most classes have 1 or 2 character names. Some normal mods are obfuscated too.</p>
+          </div>
+          <div class="tag signal" id="BADCLASS">
+            <div class="tag-head"><code>BADCLASS</code><b class="w">+10</b><span class="kind">Signal</span></div>
+            <h4>Unreadable classes</h4>
+            <p>Class files that cannot be read: encrypted or corrupt. Many of them make the file "cannot be judged".</p>
+          </div>
+        </div>
+      </section>
+      <section class="group" id="g-pack">
+        <div class="group-head"><h3>Files in the pack</h3><p>Found while walking the modpack itself, outside the jars.</p></div>
+        <div class="tags">
+          <div class="tag strong" id="DISGUISED">
+            <div class="tag-head"><code>DISGUISED</code><b class="w">+45</b><span class="kind">Strong</span></div>
+            <h4>Disguised executable in the pack</h4>
+            <p>An executable with the extension of another kind of file.</p>
+          </div>
+          <div class="tag strong" id="EXECFILE">
+            <div class="tag-head"><code>EXECFILE</code><b class="w">+30</b><span class="kind">Strong</span></div>
+            <h4>Executable or script in the pack</h4>
+            <p>An executable or script file in the pack.</p>
+          </div>
+          <div class="tag strong" id="DISGUISEDZIP">
+            <div class="tag-head"><code>DISGUISEDZIP</code><b class="w">+30</b><span class="kind">Strong</span></div>
+            <h4>Disguised archive in the pack</h4>
+            <p>A zip or jar with the extension of another kind of file.</p>
+          </div>
+          <div class="tag strong" id="LOOSECLASS">
+            <div class="tag-head"><code>LOOSECLASS</code><b class="w">+20</b><span class="kind">Strong</span></div>
+            <h4>Disguised class in the pack</h4>
+            <p>Java class bytes in a file that pretends to be something else.</p>
+          </div>
+          <div class="tag strong" id="NATIVEFILE">
+            <div class="tag-head"><code>NATIVEFILE</code><b class="w">+12</b><span class="kind">Strong</span></div>
+            <h4>Native library in the pack</h4>
+            <p>A native library lying loose in the pack.</p>
+          </div>
+          <div class="tag strong" id="JAROUT">
+            <div class="tag-head"><code>JAROUT</code><b class="w">+10</b><span class="kind">Strong</span></div>
+            <h4>Jar outside mods/</h4>
+            <p>A jar outside mods/, libraries/, versions/ and runtime/, where the game does not load it as a mod.</p>
+          </div>
+          <div class="tag signal" id="CORRUPT">
+            <div class="tag-head"><code>CORRUPT</code><b class="w">+20</b><span class="kind">Signal</span></div>
+            <h4>Unreadable archive</h4>
+            <p>The archive cannot be opened. If it is really another format, such as a RAR renamed .zip, the file is "cannot be judged".</p>
+          </div>
+          <div class="tag signal" id="NOMETA">
+            <div class="tag-head"><code>NOMETA</code><b class="w">+5</b><span class="kind">Signal</span></div>
+            <h4>Not a loadable mod</h4>
+            <p>The jar or zip has no Fabric, Quilt, Forge or NeoForge metadata. Normal for resource packs.</p>
+          </div>
+        </div>
+      </section>
+      <section class="group" id="g-index">
+        <div class="group-head"><h3>Modpack index (.mrpack)</h3><p>Problems in modrinth.index.json, the list of files an .mrpack downloads.</p></div>
+        <div class="tags">
+          <div class="tag strong" id="INDEXPATH">
+            <div class="tag-head"><code>INDEXPATH</code><b class="w">+70</b><span class="kind">Strong</span></div>
+            <h4>Path traversal</h4>
+            <p>A path in the index points outside the instance folder, so a download could overwrite files elsewhere. Checked on verified files too.</p>
+          </div>
+          <div class="tag strong" id="HASHCONFLICT">
+            <div class="tag-head"><code>HASHCONFLICT</code><b class="w">+60</b><span class="kind">Strong</span></div>
+            <h4>Conflicting hashes</h4>
+            <p>The sha1 and the sha512 in the index point to two different files.</p>
+          </div>
+          <div class="tag strong" id="HASHMISMATCH">
+            <div class="tag-head"><code>HASHMISMATCH</code><b class="w">+50</b><span class="kind">Strong</span></div>
+            <h4>Download does not match</h4>
+            <p>A downloaded file does not match the hash written in the index.</p>
+          </div>
+          <div class="tag strong" id="BADDOWNLOAD">
+            <div class="tag-head"><code>BADDOWNLOAD</code><b class="w">+30</b><span class="kind">Strong</span></div>
+            <h4>Unsafe download address</h4>
+            <p>A download address is not https, or not on the hosts Modrinth packs may use.</p>
+          </div>
+          <div class="tag strong" id="BADINDEX">
+            <div class="tag-head"><code>BADINDEX</code><b class="w">+20</b><span class="kind">Strong</span></div>
+            <h4>Malformed index</h4>
+            <p>modrinth.index.json has a malformed entry.</p>
+          </div>
+          <div class="tag strong" id="BADHASH">
+            <div class="tag-head"><code>BADHASH</code><b class="w">+10</b><span class="kind">Strong</span></div>
+            <h4>Missing hashes</h4>
+            <p>An index entry has missing or invalid hashes.</p>
+          </div>
+        </div>
+      </section>
+      <section class="group" id="g-scanner">
+        <div class="group-head"><h3>The scan itself</h3></div>
+        <div class="tags">
+          <div class="tag strong" id="SCANERROR">
+            <div class="tag-head"><code>SCANERROR</code><b class="w">+15</b><span class="kind">Strong</span></div>
+            <h4>Not analysed</h4>
+            <p>The file could not be analysed, so its result is incomplete. Never read it as clean.</p>
+          </div>
+        </div>
+      </section>
+      <p class="none" id="tag-none" hidden>No tag matches your search.</p>
+    </div>
+  </div>
+
+  <section class="next">
+    <div class="wrap">
+      <p class="eyebrow">Found something?</p>
+      <h2>Tell us about it.</h2>
+      <p class="lede">A false positive, a bug, or a mod that looks suspicious: send it to us on Discord and we will look into it.</p>
+      <div class="actions" style="justify-content:center">
+        <a class="btn btn-primary" href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Report it on Discord</a>
+        <a class="btn btn-ghost" href="modscan.html#download">Download modscan</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <p class="legal">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+    <span>© 2026 Studio Deriva · modscan is free to use, not open source</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="mods.html">Mods</a>
+      <a href="staff.html">Staff</a>
+      <a href="https://github.com/Studio-Deriva" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://discord.gg/pQPWr7vfHu" target="_blank" rel="noopener">Discord</a>
+      <a href="mailto:StudioDeriva@proton.me">Email</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="assets/i18n.js?v=202611161200"></script>
+<script src="assets/site.js?v=202610161900"></script>
+<script>
+/* Tag finder: hides the tags (and empty groups) whose id, title and text do not contain every typed word. */
+(function () {
+  var input = document.getElementById('tag-filter');
+  var groups = Array.prototype.slice.call(document.querySelectorAll('.group'));
+  var none = document.getElementById('tag-none');
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  var tags = Array.prototype.slice.call(document.querySelectorAll('.tag')).map(function (el) {
+    return { el: el, text: norm(el.textContent) };
+  });
+  input.addEventListener('input', function () {
+    var words = norm(input.value).split(/\s+/).filter(Boolean);
+    var shown = 0;
+    tags.forEach(function (t) {
+      var ok = words.every(function (w) { return t.text.indexOf(w) !== -1; });
+      t.el.hidden = !ok;
+      if (ok) shown++;
+    });
+    groups.forEach(function (g) { g.hidden = !g.querySelector('.tag:not([hidden])'); });
+    none.hidden = shown > 0;
+  });
+})();
+</script>
+</body>
+</html>

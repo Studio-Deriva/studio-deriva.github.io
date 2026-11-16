@@ -17,7 +17,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 
 const SITE = 'https://studio-deriva.github.io/';
-const PAGES = ['index.html', 'mods.html', 'staff.html', 'carves-and-crafts.html', 'modscan.html'];
+const PAGES = ['index.html', 'mods.html', 'staff.html', 'carves-and-crafts.html', 'modscan.html', 'modscan-tags.html'];
 const root = new URL('../', import.meta.url);
 
 // ---- the translations, read straight from i18n.js

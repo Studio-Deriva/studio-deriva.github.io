@@ -50,4 +50,14 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/modscan.html"/>
     <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/modscan.html"/>
   </url>
+  <url>
+    <loc>https://studio-deriva.github.io/modscan-tags.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/modscan-tags.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/modscan-tags.html"/>
+  </url>
+  <url>
+    <loc>https://studio-deriva.github.io/it/modscan-tags.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://studio-deriva.github.io/modscan-tags.html"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://studio-deriva.github.io/it/modscan-tags.html"/>
+  </url>
 </urlset>
