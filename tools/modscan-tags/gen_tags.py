@@ -21,9 +21,15 @@ def tag_card(tid, w, kind, ten, tit, den, dit):
             f'          </div>\n')
 
 
+# Groups whose tags come from an app version that is not out yet: listed in tags_data.py, kept off the page
+# until that version ships (then remove the id here and regenerate).
+UNRELEASED = {"dive"}
+
 groups_html = ""
 toc = ""
 for gid, gen, git, den, dit, tags in GROUPS:
+    if gid in UNRELEASED:
+        continue
     toc += f'        <a href="#g-{gid}">{t(gen, git)}</a>\n'
     groups_html += f'      <section class="group" id="g-{gid}">\n'
     groups_html += f'        <div class="group-head"><h3>{t(gen, git)}</h3>'
@@ -241,7 +247,7 @@ page = f'''<!doctype html>
   </div>
 </footer>
 
-<script src="assets/i18n.js?v=202611162300"></script>
+<script src="assets/i18n.js?v=202611210100"></script>
 <script src="assets/site.js?v=202610161900"></script>
 <script>
 /* Tag finder: hides the tags (and empty groups) whose id, title and text do not contain every typed word. */

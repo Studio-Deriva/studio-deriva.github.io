@@ -173,7 +173,6 @@
         <a href="#g-run">Running programs and code</a>
         <a href="#g-chains">Chains</a>
         <a href="#g-deep">Deep analysis (desktop app)</a>
-        <a href="#g-dive">DeepDive (desktop app 1.1.0 and later)</a>
         <a href="#g-hidden">Hidden content</a>
         <a href="#g-pack">Files in the pack</a>
         <a href="#g-index">Modpack index (.mrpack)</a>
@@ -399,46 +398,6 @@
           </div>
         </div>
       </section>
-      <section class="group" id="g-dive">
-        <div class="group-head"><h3>DeepDive (desktop app 1.1.0 and later)</h3><p>Only with the DeepDive switch on: a slower scan that decodes hidden code, compares a mod with its official build, fetches what a mod would download, and follows data through the code. Still nothing is ever run.</p></div>
-        <div class="tags">
-          <div class="tag strong" id="PAYLOADBAD">
-            <div class="tag-head"><code>PAYLOADBAD</code><b class="w">+60</b><span class="kind">Strong</span></div>
-            <h4>Downloads malicious code</h4>
-            <p>The file modscan fetched from the mod's download address is itself rated HIGH. True for what the server answers now: it can change later.</p>
-          </div>
-          <div class="tag strong" id="UNPACKED">
-            <div class="tag-head"><code>UNPACKED</code><b class="w">+35</b><span class="kind">Strong</span></div>
-            <h4>Hidden payload decoded</h4>
-            <p>Code was stored inside the file encrypted or encoded (XOR, Base64, gzip, AES with a key kept in the same file) and modscan decoded it. What it contains is analysed like the rest of the mod.</p>
-          </div>
-          <div class="tag strong" id="MODTAMPER">
-            <div class="tag-head"><code>MODTAMPER</code><b class="w">+30</b><span class="kind">Strong</span></div>
-            <h4>Modified copy of a known mod</h4>
-            <p>The file says it is a mod that is on Modrinth, but a few files were added or changed compared with the official build. The report names them and what they trigger. Alone it is MEDIUM: check where you got the file.</p>
-          </div>
-          <div class="tag strong" id="TOKENFLOW">
-            <div class="tag-head"><code>TOKENFLOW</code><b class="w">+30</b><span class="kind">Strong</span></div>
-            <h4>Account data reaches the network</h4>
-            <p>modscan followed the session token, or the content of a credential file, through the code until it was handed to something that sends it. Sign-in to Mojang or Microsoft is not counted.</p>
-          </div>
-          <div class="tag strong" id="AUTOCMD">
-            <div class="tag-head"><code>AUTOCMD</code><b class="w">+30</b><span class="kind">Strong</span></div>
-            <h4>Sends commands in chat by itself</h4>
-            <p>The mod can send chat commands on its own and contains a payment or operator command, such as "pay &lt;name&gt; &lt;amount&gt;" or "op &lt;name&gt;". Shop and economy helpers do this too when you click: check the code shown.</p>
-          </div>
-          <div class="tag strong" id="PACKCONFIG">
-            <div class="tag-head"><code>PACKCONFIG</code><b class="w">+20</b><span class="kind">Strong</span></div>
-            <h4>Suspicious configuration file</h4>
-            <p>A configuration file of the pack holds a webhook, a suspicious address or a command: for example a chat mod already set up to send everything to someone's Discord.</p>
-          </div>
-          <div class="tag signal" id="MIXINSENS">
-            <div class="tag-head"><code>MIXINSENS</code><b class="w">+10</b><span class="kind">Signal</span></div>
-            <h4>Mixin into the session class</h4>
-            <p>The mod changes the game class that holds your account token. Account switchers do it too.</p>
-          </div>
-        </div>
-      </section>
       <section class="group" id="g-hidden">
         <div class="group-head"><h3>Hidden content</h3><p>Things inside the jar that are not what they look like.</p></div>
         <div class="tags">
@@ -626,7 +585,7 @@
   </div>
 </footer>
 
-<script src="assets/i18n.js?v=202611162300"></script>
+<script src="assets/i18n.js?v=202611210100"></script>
 <script src="assets/site.js?v=202610161900"></script>
 <script>
 /* Tag finder: hides the tags (and empty groups) whose id, title and text do not contain every typed word. */
