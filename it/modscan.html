@@ -109,6 +109,10 @@
 .privacy { display: grid; gap: .9rem; }
 .privacy p { color: var(--muted); max-width: 52ch; }
 .privacy .warn { color: var(--fg); background: color-mix(in srgb, var(--medium) 12%, transparent); border: 1px solid color-mix(in srgb, var(--medium) 35%, transparent); border-radius: 16px; padding: .9rem 1.1rem; }
+.opensource { display: grid; gap: .9rem; margin-top: clamp(3rem, 7vw, 5rem); max-width: 72ch; }
+.opensource h3 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 900; font-stretch: 115%; }
+.opensource p { color: var(--muted); }
+.opensource .promise { color: var(--fg); background: color-mix(in srgb, var(--low) 12%, transparent); border: 1px solid color-mix(in srgb, var(--low) 35%, transparent); border-radius: 16px; padding: .9rem 1.1rem; }
 
 .next { background: var(--ink); text-align: center; }
 .next .wrap { display: grid; gap: 1.4rem; justify-items: center; }
@@ -245,7 +249,7 @@
               <dt>Mac</dt><dd>Apple Silicon (M1 o successivi)</dd>
               <dt>Account</dt><dd>Gratis, con email o Discord</dd>
               <dt>Prezzo</dt><dd>Gratis</dd>
-              <dt>Licenza</dt><dd>Proprietaria</dd>
+              <dt>Licenza</dt><dd>Proprietaria (una versione open source è in arrivo)</dd>
             </dl>
           </div>
           <div class="privacy reveal">
@@ -255,6 +259,14 @@
             <p class="warn">I punteggi sono euristici, da analisi statica, non il verdetto di un antivirus. LOW non dimostra che un file sia sicuro.</p>
           </div>
         </div>
+
+        <section class="opensource reveal" id="open-source">
+          <p class="eyebrow">Open source</p>
+          <h3>Perché modscan non è open source</h3>
+          <p>Tutto il resto che facciamo è open source, quindi modscan merita una spiegazione.</p>
+          <p>L'app non lavora da sola: si appoggia ai nostri server privati. Lì vivono gli account gratuiti e il database dei file che il team di Studio Deriva ha già segnalato come malevoli. Lì finiscono anche i risultati delle scansioni (hash, nome e verdetto) che usiamo per migliorare lo scanner. Pubblicare il codice che parla con quei server renderebbe più facile abusarne, per esempio riempiendo il database di segnalazioni false che poi arriverebbero a tutti come avvisi.</p>
+          <p class="promise"><strong>Una versione open source arriverà.</strong> Pubblicheremo una versione di modscan senza account e senza dati dai nostri server privati, completamente open source. Analizzerà i file sul tuo computer come l'app di oggi. Non avrà gli avvisi condivisi sui file già noti come malevoli, perché quelli vengono dal nostro database, e non invierà nulla ai nostri server.</p>
+        </section>
       </div>
     </div>
   </article>
