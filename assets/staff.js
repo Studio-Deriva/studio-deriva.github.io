@@ -28,6 +28,14 @@
     return Math.round(h / 24) + ' days ago';
   }
 
+  // Discord drops an avatar's old address as soon as its owner changes it, so until the next
+  // sync the saved one can be gone. Show their default Discord avatar instead.
+  function defaultAvatar(id) {
+    var n = 0;
+    try { n = Number((BigInt(id) >> BigInt(22)) % BigInt(6)); } catch (e) {}
+    return 'https://cdn.discordapp.com/embed/avatars/' + n + '.png';
+  }
+
   var SHOWN = 2; // role pills visible before "See more"
   function seeMore(n) { return IT ? 'Altri ' + n : 'See ' + n + ' more'; }
   function person(m, groupColor) {
@@ -37,7 +45,7 @@
     var extra = m.roles.length - SHOWN;
     var more = extra > 0 ? '<button class="see-more" type="button" aria-expanded="false" data-more="' + extra + '">' + seeMore(extra) + '</button>' : '';
     return '<li class="person" style="--role:' + groupColor + '">' +
-      '<div class="avatar"><img src="' + esc(m.avatar) + '" alt="" width="90" height="90" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.visibility=\'hidden\'"></div>' +
+      '<div class="avatar"><img src="' + esc(m.avatar) + '" alt="" width="90" height="90" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src=\'' + defaultAvatar(m.id) + '\'"></div>' +
       '<h3>' + esc(m.name) + '</h3>' +
       '<p class="handle">@' + esc(m.username) + '</p>' +
       '<ul class="roles" aria-label="' + t('Roles') + '">' + roles + '</ul>' + more +
