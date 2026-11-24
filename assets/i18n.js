@@ -306,7 +306,7 @@
     "Modpacks from a random link can carry account stealers. modscan looks inside every mod before you launch the game, and tells you, file by file, what looks dangerous.": "Un modpack preso da un link qualsiasi può nascondere un ladro di account. modscan guarda dentro ogni mod prima che tu avvii il gioco e ti dice, file per file, cosa sembra pericoloso.",
     "Jump to a section": "Vai a una sezione",
     "How it works": "Come funziona",
-    "modscan logo, a magnifying glass": "Logo di modscan, una lente d'ingrandimento",
+    "modscan logo, a cup of blue coffee with the Studio Deriva mark": "Logo di modscan, una tazza di caffè blu con il simbolo di Studio Deriva",
     "Check a modpack before you play it.": "Controlla un modpack prima di giocarci.",
     "Drop in a modpack and get a verdict for every file.": "Trascina un modpack e ottieni un verdetto per ogni file.",
     "The mods Modrinth already knows are set aside by their exact hash; everything else is read down to the bytecode, without ever running it.": "Le mod che Modrinth conosce già vengono messe da parte grazie al loro hash esatto; tutto il resto viene letto fino al bytecode, senza mai eseguirlo.",
