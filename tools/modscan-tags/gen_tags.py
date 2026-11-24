@@ -247,7 +247,7 @@ page = f'''<!doctype html>
   </div>
 </footer>
 
-<script src="assets/i18n.js?v=202611250010"></script>
+<script src="assets/i18n.js?v=202611250035"></script>
 <script src="assets/site.js?v=202610161900"></script>
 <script>
 /* Tag finder: hides the tags (and empty groups) whose id, title and text do not contain every typed word. */
